@@ -1,0 +1,453 @@
+{
+    "balloon": {
+      "add moves": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no"
+      },
+      "boulder": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no"
+      },
+      "dark wall": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "diamond": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no"
+      },
+      "dirt": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no"
+      },
+      "exit": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no"
+      },
+      "fire": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no"
+      },
+      "left arrow": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no"
+      },
+      "left slope": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no"
+      },
+      "light wall": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "player": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no"
+      },
+      "portal in": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "portal out": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "yes"
+      },
+      "right arrow": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no"
+      },
+      "right slope": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no"
+      }
+    },
+    "boulder": {
+      "add moves": {
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "boulder": {
+        "left": "no",
+        "right": "no",
+        "top": "deflect"
+      },
+      "dark wall": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "diamond": {
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "dirt": {
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "exit": {
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "fire": {
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "left arrow": {
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "left slope": {
+        "left": "no",
+        "right": "no",
+        "top": "deflect"
+      },
+      "light wall": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "player": {
+        "left": "no",
+        "right": "no",
+        "top": "killed"
+      },
+      "portal in": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "portal out": {
+        "bottom": "yes",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "right arrow": {
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "right slope": {
+        "left": "no",
+        "right": "no",
+        "top": "deflect"
+      }
+    },
+    "left arrow": {
+      "add moves": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "balloon": {
+        "left": "eat",
+        "right": "eat"
+      },
+      "boulder": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "dark wall": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "diamond": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "dirt": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "exit": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "fire": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "left arrow": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "left slope": {
+        "bottom": "no",
+        "left": "deflect",
+        "right": "deflect",
+        "top": "no"
+      },
+      "light wall": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "player": {
+        "bottom": "no",
+        "left": "killed",
+        "right": "killed",
+        "top": "no"
+      },
+      "portal in": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "portal out": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "right arrow": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "right slope": {
+        "bottom": "no",
+        "left": "deflect",
+        "right": "deflect",
+        "top": "no"
+      }
+    },
+    "player": {
+      "add moves": {
+        "bottom": "eat",
+        "left": "eat",
+        "right": "eat",
+        "top": "eat"
+      },
+      "balloon": {
+        "left": "displace",
+        "right": "displace"
+      },
+      "boulder": {
+        "bottom": "no",
+        "left": "displace",
+        "right": "displace",
+        "top": "no"
+      },
+      "dark wall": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "diamond": {
+        "bottom": "eat",
+        "left": "eat",
+        "right": "eat",
+        "top": "eat"
+      },
+      "dirt": {
+        "bottom": "eat",
+        "left": "eat",
+        "right": "eat",
+        "top": "eat"
+      },
+      "exit": {
+        "bottom": "exit",
+        "left": "exit",
+        "right": "exit",
+        "top": "exit"
+      },
+      "fire": {
+        "bottom": "killed",
+        "left": "killed",
+        "right": "killed",
+        "top": "killed"
+      },
+      "left arrow": {
+        "bottom": "displace",
+        "left": "no",
+        "right": "no",
+        "top": "displace"
+      },
+      "left slope": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "light wall": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "player": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "portal in": {
+        "bottom": "teleport",
+        "left": "teleport",
+        "right": "teleport",
+        "top": "teleport"
+      },
+      "portal out": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "right arrow": {
+        "bottom": "displace",
+        "left": "no",
+        "right": "no",
+        "top": "displace"
+      },
+      "right slope": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      }
+    },
+    "right arrow": {
+      "add moves": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "balloon": {
+        "left": "eat",
+        "right": "eat"
+      },
+      "boulder": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "dark wall": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "diamond": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "dirt": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "exit": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "fire": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "left arrow": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "left slope": {
+        "bottom": "no",
+        "left": "deflect",
+        "right": "deflect",
+        "top": "no"
+      },
+      "light wall": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "player": {
+        "bottom": "no",
+        "left": "killed",
+        "right": "killed",
+        "top": "no"
+      },
+      "portal in": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "portal out": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "right arrow": {
+        "bottom": "no",
+        "left": "no",
+        "right": "no",
+        "top": "no"
+      },
+      "right slope": {
+        "bottom": "no",
+        "left": "deflect",
+        "right": "deflect",
+        "top": "no"
+      }
+    }
+  }
+  
