@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="scrollThreshHoldRange">80</integer>
+    <integer name="mediumBlinkFrequency">1200</integer>
+    <integer name="blinkFrequencyRange">8</integer>
+    <integer name="blinkFrequencyRangeFactor">100</integer>
+    <integer name="blinkFrequencyDarkenWaitFactor">2</integer>
+    <integer name="blinkDarkAlpha">190</integer>
+    <integer name="blinkBrightAlpha">255</integer>
+</resources>

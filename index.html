@@ -1,9 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
-	<script src="game.js"></script>
+	<meta charset="utf-8">
+	<link rel="shortcut icon" href="#">
+	<script src="https://cdn.jsdelivr.net/npm/phaser@3.52.0/dist/phaser-arcade-physics.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.1.0/math.min.js"></script>
+	<script src="https://d3js.org/d3-array.v2.min.js"></script>
+	<script src="https://www.unpkg.com/@tidyjs/tidy/dist/umd/tidy.min.js"></script>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+	<script src="dynamics.js"></script>
+	<script src="triggers.js"></script>
+	<script src="game.js"></script>
+	<!-- <script src="msg.js"></script> -->
+	
+	<div id="header">
+		<h4 id="gameLevel"></h4>
+		<span id="diamondsRemaining"></span> &ensp;
+		<span id="movesRemaining"></span>
+		<button id="refreshButton" class="btn" onclick="resetLevel()"><i class="fa fa-repeat" onclick="resetLevel()"> RESET</i></button>
+	</div>
+	<div class="alert" id="messenger"></div>
+	<script src="dom-functions.js"></script>
+
 </body>
 </html>

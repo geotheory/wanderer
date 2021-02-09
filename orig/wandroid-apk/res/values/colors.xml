@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="textColor">@android:color/white</color>
+    <color name="warnColor">#ffff006e</color>
+    <color name="brickColor">#ff606060</color>
+    <color name="rockColor">#ff828282</color>
+    <color name="wandererColor">#ffffd800</color>
+    <color name="exitColor">#ff1eff38</color>
+    <color name="diamondColor">#ff00ffff</color>
+    <color name="earthColor">#ffffee9b</color>
+    <color name="boulderColor">#ffea5d00</color>
+    <color name="balloonColor">#ffbf00ff</color>
+    <color name="undefinedColor">#ffff3a51</color>
+</resources>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.NoBackground" parent="@android:style/Theme.Black.NoTitleBar" />
+    <style name="FillParent">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+    </style>
+    <style name="WrapContent">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="StatusBar">
+        <item name="android:background">@drawable/status_bar_bkgnd</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="StatusBarContainer" parent="@style/WrapContent">
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+    <style name="StatusTextView" parent="@style/WrapContent">
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:scrollHorizontally">false</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    <style name="StatusTextViewValue" parent="@style/StatusTextView">
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+    </style>
+    <style name="StatusTextViewLabel" parent="@style/StatusTextViewValue">
+        <item name="android:paddingLeft">12.0dip</item>
+        <item name="android:paddingRight">6.0dip</item>
+    </style>
+    <style name="HelpText" parent="@style/StatusTextView">
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:singleLine">false</item>
+    </style>
+    <style name="HelpImage" parent="@style/WrapContent">
+        <item name="android:paddingLeft">10.0dip</item>
+        <item name="android:paddingRight">10.0dip</item>
+    </style>
+    <style name="SettingsEntry" parent="@style/FillParent">
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:paddingLeft">10.0dip</item>
+        <item name="android:paddingRight">10.0dip</item>
+    </style>
+</resources>

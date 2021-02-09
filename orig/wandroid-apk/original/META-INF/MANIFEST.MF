@@ -1,0 +1,42 @@
+Manifest-Version: 1.0
+Created-By: 1.6.0 (Sun Microsystems Inc.)
+
+Name: res/layout/help_entry.xml
+SHA1-Digest: j1HgNK7fPuQp3cOdpkzZVIz3MEE=
+
+Name: res/menu/menu.xml
+SHA1-Digest: ZHUnSodkWORJS+JbTQx1kynA0Bk=
+
+Name: res/layout/help.xml
+SHA1-Digest: 3fNKrVdFcAarnq0HOTPu2fm1F4E=
+
+Name: res/layout/status.xml
+SHA1-Digest: ADKpYrnk6WURs0gm/sM7BYT6I1o=
+
+Name: res/layout/status_label_text.xml
+SHA1-Digest: CAYZtQR8M5j56R6/5oylymmFEnc=
+
+Name: res/layout-land/status.xml
+SHA1-Digest: L07ft90X38HDi5ItsXgo/cWGz0c=
+
+Name: res/drawable/status_bar_bkgnd.9.png
+SHA1-Digest: oHkIvt08aBBJQ4W026g61z3HISI=
+
+Name: resources.arsc
+SHA1-Digest: Tf48vQsm7E/SDOwOQRCwLokkF5k=
+
+Name: classes.dex
+SHA1-Digest: /jV/cNV6E87mODrVVsundxBVWgw=
+
+Name: res/layout/main.xml
+SHA1-Digest: 9AYVUxu9TTRwPcGUMJv+0gFhFwM=
+
+Name: AndroidManifest.xml
+SHA1-Digest: ytYwZHRz/vC0jqHqt9Sq8DxHizI=
+
+Name: res/layout/settings.xml
+SHA1-Digest: VPJEBLwiJDq+mFLntPvEPTwey2s=
+
+Name: res/drawable/activity_icon.png
+SHA1-Digest: WlQy+mhrMCeG58tLz+UKPN+Td/o=
+

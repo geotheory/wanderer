@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout style="@style/StatusBar"
+  xmlns:a="http://schemas.android.com/apk/res/android">
+    <LinearLayout style="@style/StatusBarContainer">
+        <include a:id="@id/level" layout="@layout/status_label_text" />
+        <include a:id="@id/score" layout="@layout/status_label_text" />
+        <include a:id="@id/maxMoves" layout="@layout/status_label_text" />
+        <include a:id="@id/diamonds" layout="@layout/status_label_text" />
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView style="@style/FillParent">
+    <LinearLayout a:orientation="vertical" style="@style/WrapContent"
+      xmlns:a="http://schemas.android.com/apk/res/android">
+        <TextView a:id="@id/headHelpEntry" a:paddingLeft="10.0dip" a:paddingRight="10.0dip" style="@style/HelpText" />
+        <TableLayout a:stretchColumns="*" a:shrinkColumns="1" style="@style/WrapContent">
+            <include a:id="@id/wandererHelpRow" layout="@layout/help_entry" />
+            <include a:id="@id/rockHelpRow" layout="@layout/help_entry" />
+            <include a:id="@id/creditHelpRow" layout="@layout/help_entry" />
+            <include a:id="@id/earthHelpRow" layout="@layout/help_entry" />
+            <include a:id="@id/teleportHelpRow" layout="@layout/help_entry" />
+            <include a:id="@id/boulderHelpRow" layout="@layout/help_entry" />
+            <include a:id="@id/arrowHelpRow" layout="@layout/help_entry" />
+            <include a:id="@id/cageHelpRow" layout="@layout/help_entry" />
+            <include a:id="@id/diamondHelpRow" layout="@layout/help_entry" />
+            <include a:id="@id/babyMonsterHelpRow" layout="@layout/help_entry" />
+            <include a:id="@id/landMineHelpRow" layout="@layout/help_entry" />
+            <include a:id="@id/slopeHelpRow" layout="@layout/help_entry" />
+            <include a:id="@id/bigMonsterHelpRow" layout="@layout/help_entry" />
+            <include a:id="@id/exitHelpRow" layout="@layout/help_entry" />
+            <include a:id="@id/balloonHelpRow" layout="@layout/help_entry" />
+            <include a:id="@id/bombHelpRow" layout="@layout/help_entry" />
+        </TableLayout>
+    </LinearLayout>
+</ScrollView>

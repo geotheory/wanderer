@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout a:orientation="vertical" style="@style/FillParent"
+  xmlns:a="http://schemas.android.com/apk/res/android">
+    <include layout="@layout/status" />
+    <de.agrothe.wanderer.MazeView a:id="@id/MazeView" style="@style/FillParent" />
+</LinearLayout>

@@ -1,0 +1,44 @@
+Signature-Version: 1.0
+SHA1-Digest-Manifest-Main-Attributes: 9QUCJMHnILftziSD8agLig+iUN8=
+Created-By: 1.6.0 (Sun Microsystems Inc.)
+SHA1-Digest-Manifest: LtDHqbDIimVtmEPtd2D/1BSRyn4=
+
+Name: res/layout/help_entry.xml
+SHA1-Digest: 9kKSZKW0CxtPDwwLBux4N+Pm7Sk=
+
+Name: res/menu/menu.xml
+SHA1-Digest: k08UYnsTj5T/zpHt+OXVe7ZUcrU=
+
+Name: res/layout/help.xml
+SHA1-Digest: f7gE2of6ZO7uW3j1PPtJL2WjNvI=
+
+Name: res/layout/status.xml
+SHA1-Digest: AwpF8G3MEPxr49bhq+aTVbxZpho=
+
+Name: res/layout/status_label_text.xml
+SHA1-Digest: AV/L4yTHC7srA5sO1NxY0sqemqo=
+
+Name: res/layout-land/status.xml
+SHA1-Digest: zvVjDDjMxC5ug1TduKqo4nAw8Dk=
+
+Name: res/drawable/status_bar_bkgnd.9.png
+SHA1-Digest: YNc7Wu7jY7cdoyOyKCMhQoBGCGw=
+
+Name: resources.arsc
+SHA1-Digest: hA0j5wQ9XLetnjWazO35ZibO8Gc=
+
+Name: classes.dex
+SHA1-Digest: bDlOi17v8R4pw5yY5xwvB2zE0Kk=
+
+Name: res/layout/main.xml
+SHA1-Digest: iDOFjus7w99NTsaYEa7RlxIavV0=
+
+Name: AndroidManifest.xml
+SHA1-Digest: 3HkTNp8a81mlH8AQMWne/O6QvKg=
+
+Name: res/layout/settings.xml
+SHA1-Digest: 5uFNPq7+k3RuqMJo5zlTeeYzsLQ=
+
+Name: res/drawable/activity_icon.png
+SHA1-Digest: fJ61/ez5JCd8yf3kLQZe1B0sKfA=
+
