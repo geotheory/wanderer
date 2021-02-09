@@ -65,8 +65,6 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
     // if(verbose) console.log( `approach ${x1}, ${y1}, ${x2}, ${y2}, ${approacher}` );
 
     var occupant_id = id_element(x2, y2);
-    // approve if no occupant or occupant is inactive
-    // if( occupant_id === -1 || !e[occupant_id].active ) return true;
     if(occupant_id === -1) return true;
     
     var occupant_type = e[occupant_id].type;
@@ -109,7 +107,6 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
             return true;
         
         case 'teleport':
-            // if(!e[occupant_id].active) return true;
             e[playerID].x = portal_out.x;
             e[playerID].y = portal_out.y;
             kill_element(occupant_id); // remove teleporter from screen

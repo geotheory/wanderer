@@ -58,7 +58,7 @@ function parse(txt) {
     for(y=16; y>0; y--) {
         for(x=1; x<=40; x++) {
             var key = lines[16 - y].substr(x - 1, 1);
-            var new_element = {'id': e.length, 'key': key, 'type': elements[key], 'x': x, 'y': y, "active": true };
+            var new_element = {'id': e.length, 'key': key, 'type': elements[key], 'x': x, 'y': y };
             if(typeof(elements[key]) === 'undefined') console.log('unknown element:', key);
             if(elements[key] != 'space' && elements[key] != 'portal out') e.push(new_element);
             if(elements[key] == 'portal out') portal_out = { "x": x, "y": y };
@@ -80,7 +80,6 @@ function id_element(x, y) {
 
 function kill_element(id) {
     e[id].sprite.destroy(true); // remove from canvas
-    // e[id].active = false;       // make inert
     e[id].x = -1;               // prevent id_element() identifying them
 }
 
