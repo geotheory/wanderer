@@ -3,6 +3,7 @@
 
 ## Game play
 
+- prevent player moving while elements are still active mobile
 - move to recursive logic for triggering of some object interactions. More distant interactions are queued?
     - arrows passing directly underneath boulders trip immediately (recursively)
 - prioritise right arrows over left arrows when both tripped by removing edible element between them

@@ -1,7 +1,5 @@
 
-var verbose = false; 
-var speed = 40;
-const { tidy, mutate, arrange, desc } = Tidy;
+// Two functions approach() and move() and the rules for direct object interactions (not remote triggers)
 
 // Rules for interactions. Tree structured:
 //
@@ -59,9 +57,10 @@ var rules = {
     }
 }
 
+
 // manage the logic of any object moving from one grid cell to another
 
-function approach(x1, y1, x2, y2, approacher, deadly){
+function approach(x1, y1, x2, y2, approacher, deadly) {
     if(x2 < 1 || x2 > 40 || y2 < 1 || y2 > 16) return false;  // edge of canvas
     // if(verbose) console.log( `approach ${x1}, ${y1}, ${x2}, ${y2}, ${approacher}` );
 
@@ -76,171 +75,181 @@ function approach(x1, y1, x2, y2, approacher, deadly){
     var mid_branch, rule;
     
     // direction
-    if( top_branch_keys.indexOf("any") > -1 ){
+    if( top_branch_keys.indexOf("any") > -1 ) {
         mid_branch = top_branch["any"];
-    } else {
+    }
+    else {
         var dir;
-        if(x1 !== x2){
+        if(x1 !== x2) {
             dir = 'side';
-        } else if(y1 > y2){
+        }
+        else if(y1 > y2) {
             dir = 'top';
-        } else dir = 'bottom';
+        }
+        else dir = 'bottom';
         mid_branch = top_branch[dir];
     }
     mid_branch_keys = Object.keys(mid_branch);
-    if( mid_branch_keys.indexOf(approacher) > -1 ){
+    if( mid_branch_keys.indexOf(approacher) > -1 ) {
         rule = mid_branch[approacher];
     } else rule = mid_branch["other"];
 
-    if(rule === 'no'){ return false; }
-    else if(rule === 'eat'){
-        if(occupant_type === 'diamond'){
-            diamonds_collected ++;
-            document.getElementById('diamondsRemaining').textContent = "💎 " + (diamonds_target - diamonds_collected);
-        }
-        if(occupant_type === 'add moves') moves_remaining += 250;
-        kill_element(occupant_id);
-        return true;
-    }
-    else if(rule === 'teleport'){
-        // if(!e[occupant_id].active) return true;
-        e[playerID].x = portal_out.x;
-        e[playerID].y = portal_out.y;
-        kill_element(occupant_id); // remove teleporter from screen
-        e[playerID].sprite.x = mapX(e[playerID].x) + 10;
-        e[playerID].sprite.y = mapY(e[playerID].y) + 13;
-        return false;
-    }
-    else if(rule === 'killed'){
-        if(!deadly) return false; // could break stuff??
-        dead = true;
-        e[playerID].dead.x = e[playerID].sprite.x;
-        e[playerID].dead.y = e[playerID].sprite.y;
-        e[playerID].sprite.x = mapX(0);
-        e[playerID].sprite.y = mapY(0);
+    switch(rule) {
 
-        if(approacher == 'boulder') message('messenger', "Killed by a falling boulder!");
-        else if(['left arrow', 'right arrow'].indexOf(approacher) >  -1) { message('messenger', 'Killed by a speeding arrow!'); }
-        else if(approacher == 'player'){
-            if(occupant_type == 'fire') message('messenger', "You were killed by an exploding landmine!");
-        } else message('messenger', "Unknown cause of death please investigate");
-        
-    }
-    else if(rule === 'exit'){
-        if(diamonds_collected == diamonds_target){
-            console.log('level complete');
-            message('messenger', 'Level complete!');
+        case 'no':
+            return false;
+
+        case 'eat':
+            if(occupant_type === 'diamond') {
+                diamonds_collected ++;
+                document.getElementById('diamondsRemaining').textContent = "💎 " + (diamonds_target - diamonds_collected);
+            }
+            if(occupant_type === 'add moves') moves_remaining += 250;
+            kill_element(occupant_id);
             return true;
-        } else return false;
-    }
-    else if(rule === 'push'){
-        var dx = x2 - x1;
-        var dy = y2 - y1;
-        var x3 = x2 + dx;
-        var y3 = y2 + dy;
-        if(x3 < 1 || x3 > 40 || y3 < 1 || y3 > 16) return false;
-        push_cell = id_element(x3, y3);
-        if(push_cell >= 0) return false;
-        e[occupant_id].x = x3;
-        e[occupant_id].y = y3;
-        e[occupant_id].sprite.x = mapX(x3) + 10;
-        e[occupant_id].sprite.y = mapY(y3) + 13;
-        console.log(`added ${occupant_id} to queue 1`);
-        if(queue.indexOf(occupant_id) === -1) queue.push(occupant_id);  // once pushed an object becomes mobile
-        // move(occupant_id, occupant_type); // once pushed an object becomes mobile
-        return true;
-    }
-    else if(rule === 'deflect'){
-        approacher_id = id_element(x1, y1);
         
-        if(approacher === 'boulder'){
-            // left deflection
-            if(id_element(x2 - 1, y2 + 1) === -1 &&   // top left cell empty
-               id_element(x2 - 1, y2) === -1 &&       // left cell empty
-               x2 - 1 >= 1 &&                         // not off canvas
-               occupant_type !== 'right slope') {
-                return (x2 - 1) + ',' + y2;
-            }
-            // right deflection
-            else if(id_element(x2 + 1, y2 + 1) === -1 &&  // top right cell empty
-                    id_element(x2 + 1, y2) === -1 &&      // right cell empty
-                    x2 + 1 <= 40 && 
-                    occupant_type !== 'left slope') {
-                return (x2 + 1) + ',' + y2;
-            }
-        }
-        else if(approacher === 'right arrow'){
-            // up deflection
-            if(id_element(x1, y1 + 1) === -1 &&      // top cell empty
-               id_element(x2, y1 + 1) === -1 &&      // top right empty
-               y2 < 16 &&                            // not off canvas
-               occupant_type !== 'right slope') {
-                return x2 + ',' + (y2 + 1)
-            }
-            // down deflection
-            else if(id_element(x1, y2 - 1) === -1 && // bottom cell empty
-               id_element(x2, y2 - 1) === -1 &&      // bottom right empty
-               y2 > 1 &&                             // not off canvas
-               occupant_type !== 'left slope') {
-                return x2 + ',' + (y2 - 1);
-            }
-        }
-        else if(approacher === 'left arrow'){
-            // up deflection
-            if(id_element(x1, y1 + 1) === -1 &&      // top cell empty
-               id_element(x2, y1 + 1) === -1 &&      // top left empty
-               y2 < 16 &&                            // not off canvas
-               occupant_type !== 'left slope') {
-                return x2 + ',' + (y2 + 1);
-            }
-            // down deflection
-            else if(id_element(x1, y1 - 1) === -1 && // bottom cell empty
-               id_element(x2, y1 - 1) === -1 &&      // bottom left empty
-               y2 > 1 &&                             // not off canvas
-               occupant_type !== 'right slope') {
-                   return x2 + ',' + (y2 - 1);
-            }
-        }
-        else if(approacher === 'balloon'){
-            // left deflection
-            if(id_element(x2 - 1, y2 + 1) === -1 &&  // top left cell empty
-               id_element(x2 - 1, y2) === -1 &&      // left cell empty
-               x2 - 1 >= 1 &&                        // not off canvas
-               occupant_type === 'right slope') {
-                return (x2 - 1) + ',' + y2;
-            }
-            // right deflection
-            else if(id_element(x2 + 1, y2 + 1) === -1 &&  // top right cell empty
-                    id_element(x2 + 1, y2) === -1 &&      // right cell empty
-                    x2 + 1 <= 40 &&
-                    occupant_type === 'left slope') {
-                return (x2 + 1) + ',' + y2;
-            }
-        }
-        // deflect sprite and continue movement
-        // if(x1 !== e[approacher_id].x || y1 !== e[approacher_id].y){
-        //     e[approacher_id].sprite.x = mapX(e[approacher_id].x) + 10;
-        //     e[approacher_id].sprite.y = mapY(e[approacher_id].y) + 13;
-        //     // move(approacher_id, approacher); // once deflected an object remains mobile
-        // }
-        return false;
-    }
+        case 'teleport':
+            // if(!e[occupant_id].active) return true;
+            e[playerID].x = portal_out.x;
+            e[playerID].y = portal_out.y;
+            kill_element(occupant_id); // remove teleporter from screen
+            e[playerID].sprite.x = mapX(e[playerID].x) + 10;
+            e[playerID].sprite.y = mapY(e[playerID].y) + 13;
+            return false;
+
+        case 'killed':
+            if(!deadly) return false; // could break stuff??
+            dead = true;
+            e[playerID].dead.x = e[playerID].sprite.x;
+            e[playerID].dead.y = e[playerID].sprite.y;
+            e[playerID].sprite.x = mapX(0);
+            e[playerID].sprite.y = mapY(0);
+    
+            if(approacher == 'boulder') message('messenger', "Killed by a falling boulder!");
+            else if(['left arrow', 'right arrow'].indexOf(approacher) >  -1) { message('messenger', 'Killed by a speeding arrow!'); }
+            else if(approacher == 'player') {
+                if(occupant_type == 'fire') message('messenger', "You were killed by an exploding landmine!");
+            } else message('messenger', "Unknown cause of death please investigate");
+
+        case 'exit':
+            if(diamonds_collected == diamonds_target) {
+                console.log('level complete');
+                message('messenger', 'Level complete!');
+                return true;
+            } else return false;
+
+        case 'push':
+            var dx = x2 - x1;
+            var dy = y2 - y1;
+            var x3 = x2 + dx;
+            var y3 = y2 + dy;
+            if(x3 < 1 || x3 > 40 || y3 < 1 || y3 > 16) return false;
+            push_cell = id_element(x3, y3);
+            if(push_cell >= 0) return false;
+            e[occupant_id].x = x3;
+            e[occupant_id].y = y3;
+            e[occupant_id].sprite.x = mapX(x3) + 10;
+            e[occupant_id].sprite.y = mapY(y3) + 13;
+            console.log(`added ${occupant_id} to queue 1`);
+            if(queue.indexOf(occupant_id) === -1) queue.push(occupant_id);  // once pushed an object becomes mobile
+            // move(occupant_id, occupant_type); // once pushed an object becomes mobile
+            return true;
+         
+        case 'deflect':
+            approacher_id = id_element(x1, y1);
+
+            switch(approacher) {
+
+                case 'boulder':
+                    // left deflection
+                    if(id_element(x2 - 1, y2 + 1) === -1 &&   // top left cell empty
+                    id_element(x2 - 1, y2) === -1 &&       // left cell empty
+                    x2 - 1 >= 1 &&                         // not off canvas
+                    occupant_type !== 'right slope') {
+                        return (x2 - 1) + ',' + y2;
+                    }
+                    // right deflection
+                    else if(id_element(x2 + 1, y2 + 1) === -1 &&  // top right cell empty
+                            id_element(x2 + 1, y2) === -1 &&      // right cell empty
+                            x2 + 1 <= 40 && 
+                            occupant_type !== 'left slope') {
+                        return (x2 + 1) + ',' + y2;
+                    }
+                    break;
+
+                case 'right arrow':
+                    // up deflection
+                    if( id_element(x1, y1 + 1) === -1 &&      // top cell empty
+                        id_element(x2, y1 + 1) === -1 &&      // top right empty
+                        y2 < 16 &&                            // not off canvas
+                        occupant_type !== 'right slope') {
+                            return x2 + ',' + (y2 + 1)
+                        }
+                    // down deflection
+                    else if(id_element(x1, y2 - 1) === -1 &&  // bottom cell empty
+                            id_element(x2, y2 - 1) === -1 &&  // bottom right empty
+                            y2 > 1 &&                         // not off canvas
+                            occupant_type !== 'left slope') {
+                                return x2 + ',' + (y2 - 1);
+                            }
+                    break;
+
+                case 'left arrow':
+                    // up deflection
+                    if( id_element(x1, y1 + 1) === -1 &&      // top cell empty
+                        id_element(x2, y1 + 1) === -1 &&      // top left empty
+                        y2 < 16 &&                            // not off canvas
+                        occupant_type !== 'left slope') {
+                            return x2 + ',' + (y2 + 1);
+                        }
+                    // down deflection
+                    else if(id_element(x1, y1 - 1) === -1 &&  // bottom cell empty
+                            id_element(x2, y1 - 1) === -1 &&  // bottom left empty
+                            y2 > 1 &&                         // not off canvas
+                            occupant_type !== 'right slope') {
+                                return x2 + ',' + (y2 - 1);
+                            }
+                    break;
+
+                case 'balloon':
+                    // left deflection
+                    if( id_element(x2 - 1, y2) === -1 &&      // top left cell empty
+                        id_element(x2 - 1, y1) === -1 &&      // left cell empty
+                        x2 - 1 >= 1 &&                        // not off canvas
+                        occupant_type === 'right slope') {
+                            return (x2 - 1) + ',' + y2;
+                        }
+                    // right deflection
+                    else if(id_element(x2 + 1, y2) === -1 &&  // top right cell empty
+                            id_element(x2 + 1, y1) === -1 &&  // right cell empty
+                            x2 + 1 <= 40 &&
+                            occupant_type === 'left slope') {
+                                return (x2 + 1) + ',' + y2;
+                            }
+                    break;
+            } // end approacher switch
+
+            return false;
+
+    } // end rule switch
 }
 
+//----------------------------------------------------------------------------------
 
 // dynamic logic for mobile elements
 
 function move(id, type = '', deadly = false) {
-    busy = true;  // pause user inputs
+    busy = true;  // pause other elements
+    hold = true;  // pause user inputs
     if(verbose) console.log('move ' + String(id));
     if(type === '') type = e[id].type;
     
     // which way will the element move
     var dx, dy;
-    if(type === 'boulder'){ dx = 0; dy = -1; }
-    if(type === 'left arrow'){ dx = -1; dy = 0; }
-    if(type === 'right arrow'){ dx = 1; dy = 0; }
-    if(type === 'balloon'){ dx = 0; dy = 1; }
+    if(type === 'boulder') { dx = 0; dy = -1; }
+    if(type === 'left arrow') { dx = -1; dy = 0; }
+    if(type === 'right arrow') { dx = 1; dy = 0; }
+    if(type === 'balloon') { dx = 0; dy = 1; }
     var x1 = e[id].x;
     var y1 = e[id].y;
     if(verbose) console.log( `    ${x1},${y1}` );
@@ -250,7 +259,7 @@ function move(id, type = '', deadly = false) {
     var target_accessible = approach(x1, y1, x1 + dx, y1 + dy, type, deadly);
 
     if(target_accessible) {
-        if(target_accessible === true){ // move to target
+        if(target_accessible === true) { // move to target
             e[id].x = x1 + dx;
             e[id].y = y1 + dy;
         }

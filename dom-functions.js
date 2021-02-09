@@ -9,15 +9,15 @@ function message(id, msg) {
 
 
 document.onkeyup = function(event) {
-    if (event.keyCode === 27){
+    if (event.keyCode === 27) {
         document.getElementById('messenger').style.display='none';
     }
-    if([37,38,39,40].indexOf(event.keyCode) > -1){
+    if([37,38,39,40].indexOf(event.keyCode) > -1) {
         keydown = 0;
         // input_sleeping = false;
     }
  }
 
- function resetLevel(){
+ function resetLevel() {
      location.reload();
  }

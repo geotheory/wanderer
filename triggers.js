@@ -71,10 +71,10 @@ var trigger_rules = {
     }
 }
 
-// function offset(x1, y1, x2, y2){ return String(x1 - x2) + ',' + String(y1 - y2); }
+// function offset(x1, y1, x2, y2) { return String(x1 - x2) + ',' + String(y1 - y2); }
 
-function triggers(x1, y1, x2, y2, type = ''){
-    if(type === ''){
+function triggers(x1, y1, x2, y2, type = '') {
+    if(type === '') {
         var id = id_element(x2, y2);
         type = e[id].type;
     };
@@ -84,27 +84,34 @@ function triggers(x1, y1, x2, y2, type = ''){
     var dy = y2 - y1;
     
     // certain element types can trigger only when moving in certain directions
-    if(type === 'player') { // can trigger in any direction
-        if(dx > 0) dir = 'right';
-        else if(dx < 0) dir = 'left';
-        else if(dy > 0) dir = 'up';
-        else if(dy < 0) dir = 'down';
-    }
-    else if(type === 'boulder') { // can trigger by downward motion
-        if(dy < 0) dir = 'down';
-        else return;
-    }
-    else if(type === 'left arrow') { // can trigger by leftward motion
-        if(dx < 0) dir = 'left';
-        else return;
-    }
-    else if(type === 'right arrow') { // etc
-        if(dx > 0) dir = 'right';
-        else return;
-    }
-    else if(type === 'balloon') { // etc
-        if(dy > 0) dir = 'up';
-        else return;
+
+    switch(type){
+        case 'player':     // can trigger in any direction
+            if(dx > 0) dir = 'right';
+            else if(dx < 0) dir = 'left';
+            else if(dy > 0) dir = 'up';
+            else if(dy < 0) dir = 'down';
+            break;
+
+        case 'boulder':    // can trigger by downward motion
+            if(dy < 0) dir = 'down';
+            else return;
+            break;
+
+        case 'left arrow': // can trigger by leftward motion
+            if(dx < 0) dir = 'left';
+            else return;
+            break;
+
+        case 'right arrow': // etc
+            if(dx > 0) dir = 'right';
+            else return;
+            break;
+
+        case 'balloon':     // can trigger by upward motion
+            if(dy > 0) dir = 'up';
+            else return;
+            break;
     }
 
     var neighbours = e.filter(i => i.x >= x1 - 2 && i.x <= x1 + 2 && i.y >= y1 - 2 && i.y <= y1 + 2)
@@ -118,11 +125,11 @@ function triggers(x1, y1, x2, y2, type = ''){
 
     neighbours = tidy(neighbours, arrange(['y',desc('x')]) );
 
-    for(var i=0; i<neighbours.length; i++){
+    for(var i=0; i<neighbours.length; i++) {
         var n = neighbours[i];
         var n_offset = String(x1 - n.x) + ',' + String(y1 - n.y);//  offset(x1, y1, n.x, n.y);
         var rule_set = trigger_rules[dir][type][n.type];
-        if(rule_set.indexOf(n_offset) > -1){
+        if(rule_set.indexOf(n_offset) > -1) {
             if(queue.indexOf(n.id) === -1) queue.push(n.id);
             if(verbose) console.log(`added ${n.id} to queue 2`);
         }
