@@ -13,8 +13,9 @@ level_grid = function(str){
   tibble(key = str_split(str, '')[[1]],
          x = rep(1:40, 16),
          y = rep(16:1, each = 40)) %>% 
-    group_by(y) %>% summarise(line = paste(key, collapse=' '), .groups='drop') %>% 
-    .[['line']] %>% rev() %>% paste(collapse='\n')
+    group_by(y) %>% summarise(line = paste(key, collapse=''), .groups='drop') %>% 
+    .[['line']] %>% rev() %>% paste(collapse='\n') %>% 
+    str_replace_all(fixed('-'), ' ')
 }
 
 
@@ -35,10 +36,14 @@ d = enframe(s, name = NULL, value = 'xml') %>%
   mutate(grid = map_chr(screen, level_grid))
 
 for(i in d$level){
-  d %>% filter(level == i) %>% .[['grid']] %>% 
-    writeLines(glue::glue('wandroid-screens/screen.{formatC(i,width=2,flag='0')}.txt'))
+  d %>% filter(level == i) %>% .[['grid']] %>% writeLines(glue::glue('wandroid-screens/screen.{formatC(i,width=2,flag="0")}.txt'))
 }
 
-
+d %>% select(level, chars) %>% 
+  unnest(chars) %>% 
+  distinct() %>% 
+  group_by(chars) %>% 
+  count(chars, sort = TRUE) %>% View()
+  
 
 

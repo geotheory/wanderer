@@ -117,7 +117,7 @@ var config = {
 }
 
 function preload (){
-    this.load.text({ key: 'data', url: './screens/screen.5.txt' });
+    this.load.text({ key: 'data', url: './screens/screen.23.txt' });
     // this.load.text({ key: 'data', url: './orig2/wanderer/screens/test' });
     // this.load.image('mist', 'backgrounds/mist.jpg');
     this.load.svg('diamond', 'sprites/diamond.svg', { scale: 0.43 });

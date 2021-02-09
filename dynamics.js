@@ -206,14 +206,14 @@ function approach(x1, y1, x2, y2, approacher, deadly){
             if(id_element(x2 - 1, y2 + 1) === -1 &&  // top left cell empty
                id_element(x2 - 1, y2) === -1 &&      // left cell empty
                x2 - 1 >= 1 &&                        // not off canvas
-               occupant_type === 'left slope') {
+               occupant_type === 'right slope') {
                 return (x2 - 1) + ',' + y2;
             }
             // right deflection
             else if(id_element(x2 + 1, y2 + 1) === -1 &&  // top right cell empty
                     id_element(x2 + 1, y2) === -1 &&      // right cell empty
-                    x2 + 1 <= 40 && 
-                    occupant_type === 'right slope') {
+                    x2 + 1 <= 40 &&
+                    occupant_type === 'left slope') {
                 return (x2 + 1) + ',' + y2;
             }
         }
