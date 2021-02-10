@@ -1,8 +1,8 @@
-// script with game setup and Phaser flow
 
-var level, lines, level_title, level_moves, cursors, playerID, input_sleeping, 
-    diamonds_target, diamonds_collected = 0, moves_remaining,
-    portal_out = { "x": -1, "y": -1 },
+// Game setup and Phaser flow
+
+var level_num, level, lines, level_title, level_moves, cursors, playerID, input_sleeping, 
+    diamonds_target, diamonds_collected, moves_remaining, portal_out,
     e = [],       // main container for elements and their sprites. Order is preserved so e[n].id is their array index
     queue = [],   // element triggers not actioned immediately are queued
     busy = false, // pause everything while an element is moving
@@ -10,6 +10,7 @@ var level, lines, level_title, level_moves, cursors, playerID, input_sleeping,
     dead = false, // true when killed
     keydown = 0,  // keypress timer
     speed = 30,   // delay of moving objects (lower = faster)
+    create_this = 0, // globalise the create() function's methods level management
     verbose = false;
 
 var elements = {
@@ -41,19 +42,23 @@ const sleep = (milliseconds) => { return new Promise(resolve => setTimeout(resol
 
 const { tidy, mutate, arrange, desc } = Tidy;
 
-// build list 'e' of game elements
-function parse(txt) {
-    for(var i=0; i<e.length; i++) {
-        if(typeof(e[i].sprite) !== 'undefined') e[i].sprite.destroy();
-    }
+// reads in data and builds the level. Accepts level number and option to purge existing level
+
+function load_level(level_number) {
+    
+    level_num = level_number;
+    if(create_this.children.list.length > 0) create_this.children.list = [];
     e = [];
-    level = txt;
+
+    var data = create_this.cache.text.get(`data${level_number}`);
+    level = data;
     lines = level.split('\n');
     level_title = lines[16];
     document.getElementById('gameLevel').textContent = level_title;
     moves_remaining = Number(lines[17]);
     if(moves_remaining === 0) moves_remaining = 99999;  // 99999 denotes unlimited moves and will not count down
-    document.getElementById('movesRemaining').textContent = "⏳ " + [moves_remaining, 'unlmited'][(moves_remaining === 99999)+0];
+    document.getElementById('movesRemaining').textContent = "⏳ " + [moves_remaining, 'unlimited'][(moves_remaining === 99999)+0];
+    portal_out = { "x": -1, "y": -1 }; // global
 
     for(y=16; y>0; y--) {
         for(x=1; x<=40; x++) {
@@ -66,7 +71,46 @@ function parse(txt) {
     }
 
     diamonds_target = e.filter(i => i.type == 'diamond').length;
+    diamonds_collected = 0;
     document.getElementById('diamondsRemaining').textContent = "💎 " + (diamonds_target - diamonds_collected);
+
+    // this.add.image(400, 200, 'mist');
+    var dark_wall_graphics = create_this.add.graphics({ fillStyle: { color: 0x777777 } });
+    var light_wall_graphics = create_this.add.graphics({ fillStyle: { color: 0x888888 } });
+    
+    for(var i=0; i<e.length; i++) {
+        if(e[i].type == 'dark wall') {
+            e[i].sprite = new Phaser.Geom.Rectangle(mapX(e[i].x), mapY(e[i].y), 20, 25, '#000', '#000');
+            dark_wall_graphics.fillRectShape(e[i].sprite);
+        }
+        if(e[i].type == 'light wall') {
+            e[i].sprite = new Phaser.Geom.Rectangle(mapX(e[i].x), mapY(e[i].y), 20, 25, '#000', '#000');
+            light_wall_graphics.fillRectShape(e[i].sprite);
+        }
+        if(e[i].type == 'diamond') { e[i].sprite = create_this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'diamond'); }
+        if(e[i].type == 'add moves') { e[i].sprite = create_this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'add moves'); }
+        if(e[i].type == 'boulder') { e[i].sprite = create_this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'boulder'); }
+        if(e[i].type == 'dirt') { e[i].sprite = create_this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'dirt'); }
+        if(e[i].type == 'left slope') { e[i].sprite = create_this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'left slope'); }
+        if(e[i].type == 'right slope') { e[i].sprite = create_this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'right slope'); }
+        if(e[i].type == 'fire') { e[i].sprite = create_this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'fire'); }
+        if(e[i].type == 'portal in') { e[i].sprite = create_this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'portal in'); }
+        if(e[i].type == 'exit') { e[i].sprite = create_this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'exit'); }
+        if(e[i].type == 'left arrow') { e[i].sprite = create_this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'left arrow'); }
+        if(e[i].type == 'right arrow') { e[i].sprite = create_this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'right arrow'); }
+        if(e[i].type == 'balloon') { e[i].sprite = create_this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'balloon'); }
+        if(e[i].type == 'big monster') { e[i].sprite = create_this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'big monster'); }
+        if(e[i].type == 'baby monster') { e[i].sprite = create_this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'baby monster'); }
+        if(e[i].type == 'cage') { e[i].sprite = create_this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'cage'); }
+        if(e[i].type == 'bomb') { e[i].sprite = create_this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'bomb'); }
+        if(e[i].type == 'player') { playerID = i; }
+    }
+    // render player sprites last
+    e[playerID].sprite = create_this.add.image(mapX(e[playerID].x)+10, mapY(e[playerID].y)+13, 'player');
+    cursors = create_this.input.keyboard.createCursorKeys();
+    busy = false;
+    hold = false;
+    dead = false;
 }
 
 
@@ -100,16 +144,20 @@ var config = {
         preload: preload,
         create: create,
         update: update
-    }//,
-    // fps: {
-    //     target: 30,
-    //     min: 30,
-    //     forceSetTimeOut: true
-    //   }
+    },
+    fps: {
+        target: 30,
+        min: 30,
+        forceSetTimeOut: true
+    },
+    audio: {
+        disableWebAudio: true
+    }
 }
 
 function preload () {
-    this.load.text({ key: 'data', url: './screens/screen.1.txt' });
+    for(var i=1; i<=61; i++) this.load.text({ key: `data${i}`, url: `./screens/screen.${i}.txt` });
+    // this.load.text({ key: 'data', url: './screens/screen.1.txt' });
     // this.load.text({ key: 'data', url: './orig2/wanderer/screens/test' });
     // this.load.image('mist', 'backgrounds/mist.jpg');
     this.load.svg('diamond', 'sprites/diamond.svg', { scale: 0.43 });
@@ -129,50 +177,61 @@ function preload () {
     this.load.svg('cage', 'sprites/cage.svg', { scale: 0.2 });
     this.load.svg('bomb', 'sprites/bomb.svg', { scale: 0.4 });
     this.load.svg('player', 'sprites/player.svg', { scale: 0.17 });
+    this.load.svg('player-left', 'sprites/player-left.svg', { scale: 0.17 });
+    this.load.svg('player-right', 'sprites/player-right.svg', { scale: 0.17 });
+    this.load.svg('player-up', 'sprites/player-up.svg', { scale: 0.17 });
+    this.load.svg('player-down', 'sprites/player-down.svg', { scale: 0.17 });
     this.load.svg('player-dead', 'sprites/player-dead.svg', { scale: 0.17 });
+
+    this.load.audio('sound-teleport', 'sounds/teleport.wav');
+    this.load.audio('sound-tick', 'sounds/tick.wav');
+    this.load.audio('sound-diamond', 'sounds/diamond.wav');
+    this.load.audio('sound-fire', 'sounds/fire.wav');
+    this.load.audio('sound-boulder-killed', 'sounds/boulder.wav');
+    this.load.audio('sound-boulder-fall', 'sounds/boulder-fall.wav');
+    this.load.audio('sound-arrow', 'sounds/arrow.wav');
 }
 
 
 function create () {
-    var data = this.cache.text.get('data');
     
-    parse(data)
+    create_this = this;
+    load_level(1);
     
-    // this.add.image(400, 200, 'mist');
-    var dark_wall_graphics = this.add.graphics({ fillStyle: { color: 0x777777 } });
-    var light_wall_graphics = this.add.graphics({ fillStyle: { color: 0x888888 } });
+    // // this.add.image(400, 200, 'mist');
+    // var dark_wall_graphics = this.add.graphics({ fillStyle: { color: 0x777777 } });
+    // var light_wall_graphics = this.add.graphics({ fillStyle: { color: 0x888888 } });
     
-    for(var i=0; i<e.length; i++) {
-        if(e[i].type == 'dark wall') {
-            e[i].sprite = new Phaser.Geom.Rectangle(mapX(e[i].x), mapY(e[i].y), 20, 25, '#000', '#000');
-            dark_wall_graphics.fillRectShape(e[i].sprite);
-        }
-        if(e[i].type == 'light wall') {
-            e[i].sprite = new Phaser.Geom.Rectangle(mapX(e[i].x), mapY(e[i].y), 20, 25, '#000', '#000');
-            light_wall_graphics.fillRectShape(e[i].sprite);
-        }
-        if(e[i].type == 'diamond') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'diamond'); }
-        if(e[i].type == 'add moves') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'add moves'); }
-        if(e[i].type == 'boulder') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'boulder'); }
-        if(e[i].type == 'dirt') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'dirt'); }
-        if(e[i].type == 'left slope') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'left slope'); }
-        if(e[i].type == 'right slope') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'right slope'); }
-        if(e[i].type == 'fire') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'fire'); }
-        if(e[i].type == 'portal in') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'portal in'); }
-        if(e[i].type == 'exit') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'exit'); }
-        if(e[i].type == 'left arrow') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'left arrow'); }
-        if(e[i].type == 'right arrow') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'right arrow'); }
-        if(e[i].type == 'balloon') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'balloon'); }
-        if(e[i].type == 'big monster') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'big monster'); }
-        if(e[i].type == 'baby monster') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'baby monster'); }
-        if(e[i].type == 'cage') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'cage'); }
-        if(e[i].type == 'bomb') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'bomb'); }
-        if(e[i].type == 'player') { playerID = i; }
-    }
-    // render player sprites last
-    e[playerID].sprite = this.add.image(mapX(e[playerID].x)+10, mapY(e[playerID].y)+13, 'player');
-    e[playerID].dead = this.add.image(mapX(0), mapY(0), 'player-dead');
-    cursors = this.input.keyboard.createCursorKeys();
+    // for(var i=0; i<e.length; i++) {
+    //     if(e[i].type == 'dark wall') {
+    //         e[i].sprite = new Phaser.Geom.Rectangle(mapX(e[i].x), mapY(e[i].y), 20, 25, '#000', '#000');
+    //         dark_wall_graphics.fillRectShape(e[i].sprite);
+    //     }
+    //     if(e[i].type == 'light wall') {
+    //         e[i].sprite = new Phaser.Geom.Rectangle(mapX(e[i].x), mapY(e[i].y), 20, 25, '#000', '#000');
+    //         light_wall_graphics.fillRectShape(e[i].sprite);
+    //     }
+    //     if(e[i].type == 'diamond') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'diamond'); }
+    //     if(e[i].type == 'add moves') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'add moves'); }
+    //     if(e[i].type == 'boulder') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'boulder'); }
+    //     if(e[i].type == 'dirt') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'dirt'); }
+    //     if(e[i].type == 'left slope') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'left slope'); }
+    //     if(e[i].type == 'right slope') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'right slope'); }
+    //     if(e[i].type == 'fire') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'fire'); }
+    //     if(e[i].type == 'portal in') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'portal in'); }
+    //     if(e[i].type == 'exit') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'exit'); }
+    //     if(e[i].type == 'left arrow') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'left arrow'); }
+    //     if(e[i].type == 'right arrow') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'right arrow'); }
+    //     if(e[i].type == 'balloon') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'balloon'); }
+    //     if(e[i].type == 'big monster') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'big monster'); }
+    //     if(e[i].type == 'baby monster') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'baby monster'); }
+    //     if(e[i].type == 'cage') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'cage'); }
+    //     if(e[i].type == 'bomb') { e[i].sprite = this.add.image(mapX(e[i].x)+10, mapY(e[i].y)+13, 'bomb'); }
+    //     if(e[i].type == 'player') { playerID = i; }
+    // }
+    // // render player sprites last
+    // e[playerID].sprite = this.add.image(mapX(e[playerID].x)+10, mapY(e[playerID].y)+13, 'player');
+    // cursors = this.input.keyboard.createCursorKeys();
 }
 
 
@@ -180,13 +239,15 @@ function update () {
     
     if(busy || dead) return;
 
-    for(var i=0; i<queue.length; i++) {
-        var q = queue[i];
-        queue = queue.filter((x,ind) => ![i].includes(ind)); // remove from queue
-        var moved = move(q);
-        if(moved) break;
+    if(queue.length !== 0){
+        for(var i=0; i<queue.length; i++) {
+            var q = queue[i];
+            queue = queue.filter((x,ind) => ![i].includes(ind)); // remove from queue
+            var moved = move(q);
+            if(moved) break;
+        }
     }
-    if(queue.length === 0) hold = false;
+    else hold = false;
 
     if( !input_sleeping && !hold ) {
 
@@ -207,20 +268,23 @@ function update () {
             var target_accessible = approach(x1, y1, x2, y2, 'player', 'false');
 
             if(target_accessible) {
+                // update sprite appearance
+                if( dx < 0) e[playerID].sprite.setTexture('player-left');
+                else if (dx > 0) e[playerID].sprite.setTexture('player-right');
+                else if (dy < 0) e[playerID].sprite.setTexture('player-down');
+                else if (dy > 0) e[playerID].sprite.setTexture('player-up');
+
                 e[playerID].x = x2;
                 e[playerID].y = y2;
                 e[playerID].sprite.x = mapX(e[playerID].x) + 10;
                 e[playerID].sprite.y = mapY(e[playerID].y) + 13;
                 
                 if(moves_remaining !== 99999) moves_remaining--;
-                document.getElementById('movesRemaining').textContent = "⏳ " + [moves_remaining, 'No limit'][(moves_remaining === 99999)+0];
+                document.getElementById('movesRemaining').textContent = "⏳ " + [moves_remaining, 'unlimited'][(moves_remaining === 99999)+0];
 
                 if(moves_remaining === 0) {
                     dead = true;
-                    e[playerID].dead.x = e[playerID].sprite.x;
-                    e[playerID].dead.y = e[playerID].sprite.y;
-                    e[playerID].sprite.x = mapX(0);
-                    e[playerID].sprite.y = mapY(0);
+                    e[playerID].sprite.setTexture('player-dead');
                     message('messenger', "You ran out of time!");
                 }
 

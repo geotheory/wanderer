@@ -101,8 +101,10 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
             if(occupant_type === 'diamond') {
                 diamonds_collected ++;
                 document.getElementById('diamondsRemaining').textContent = "💎 " + (diamonds_target - diamonds_collected);
+                // create_this.sound.play('sound-diamond');
             }
-            if(occupant_type === 'add moves') moves_remaining += 250;
+            else if(occupant_type === 'add moves') moves_remaining += 250;
+            // else if(occupant_type === 'dirt') create_this.sound.play('sound-tick');
             kill_element(occupant_id);
             return true;
         
@@ -112,26 +114,33 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
             kill_element(occupant_id); // remove teleporter from screen
             e[playerID].sprite.x = mapX(e[playerID].x) + 10;
             e[playerID].sprite.y = mapY(e[playerID].y) + 13;
-            return false;
+            // create_this.sound.play('sound-teleport');
+            return false; 
 
         case 'killed':
             if(!deadly) return false; // could break stuff??
             dead = true;
-            e[playerID].dead.x = e[playerID].sprite.x;
-            e[playerID].dead.y = e[playerID].sprite.y;
-            e[playerID].sprite.x = mapX(0);
-            e[playerID].sprite.y = mapY(0);
+            e[playerID].sprite.setTexture('player-dead');
     
-            if(approacher == 'boulder') message('messenger', "Killed by a falling boulder!");
-            else if(['left arrow', 'right arrow'].indexOf(approacher) >  -1) { message('messenger', 'Killed by a speeding arrow!'); }
+            if(approacher == 'boulder'){
+                message('messenger', "Killed by a falling boulder!");
+                // create_this.sound.play('sound-boulder-killed');
+            }
+            else if(['left arrow', 'right arrow'].indexOf(approacher) >  -1) {
+                message('messenger', 'Killed by a speeding arrow!');
+                // create_this.sound.play('sound-arrow');
+            }
             else if(approacher == 'player') {
-                if(occupant_type == 'fire') message('messenger', "You were killed by an exploding landmine!");
+                if(occupant_type == 'fire'){
+                    message('messenger', "You were killed by an exploding landmine!");
+                    // create_this.sound.play('sound-fire');
+                }
             } else message('messenger', "Unknown cause of death please investigate");
+            return false;
 
         case 'exit':
             if(diamonds_collected == diamonds_target) {
-                console.log('level complete');
-                message('messenger', 'Level complete!');
+                message('messenger', 'Level complete!', 'Next level', 'next_level();');
                 return true;
             } else return false;
 
@@ -186,7 +195,7 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
                     else if(id_element(x1, y2 - 1) === -1 &&  // bottom cell empty
                             id_element(x2, y2 - 1) === -1 &&  // bottom right empty
                             y2 > 1 &&                         // not off canvas
-                            occupant_type !== 'left slope') {
+                            occupant_type === 'right slope') {
                                 return x2 + ',' + (y2 - 1);
                             }
                     break;
@@ -203,7 +212,7 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
                     else if(id_element(x1, y1 - 1) === -1 &&  // bottom cell empty
                             id_element(x2, y1 - 1) === -1 &&  // bottom left empty
                             y2 > 1 &&                         // not off canvas
-                            occupant_type !== 'right slope') {
+                            occupant_type === 'left slope') {
                                 return x2 + ',' + (y2 - 1);
                             }
                     break;

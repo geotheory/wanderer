@@ -1,8 +1,8 @@
 // interactivity and info messaging
 
-function message(id, msg) {
+function message(id, msg, button_lab = 'TRY AGAIN', callback = "reset_level();") {
   var x = document.getElementById(id);
-  var new_html = `<span class="closebtn btn" onclick="resetLevel();">TRY AGAIN</span> ${msg}`;
+  var new_html = `<span class="closebtn btn" onclick="${callback}">${button_lab}</span> ${msg}`;
   x.innerHTML = new_html;
   x.style.display = "block";
 } 
@@ -18,6 +18,12 @@ document.onkeyup = function(event) {
     }
  }
 
- function resetLevel() {
-     location.reload();
+ function reset_level() {
+    load_level(level_num);
+    document.getElementById('messenger').style.display='none';
+ }
+
+ function next_level() {
+    level_num++;
+    reset_level()
  }
