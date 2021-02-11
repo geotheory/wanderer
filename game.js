@@ -69,7 +69,7 @@ function load_level(level_number) {
     level = data;
     lines = level.split('\n');
     level_title = lines[16];
-    document.getElementById('gameNote').textContent = level_title;
+    // document.getElementById('gameNote').textContent = level_title;
     document.getElementById('gameLevel').textContent = 'Level: ' + level_number;
     moves_remaining = Number(lines[17]);
     if(moves_remaining === 0) moves_remaining = 99999;  // 99999 denotes unlimited moves and will not count down
