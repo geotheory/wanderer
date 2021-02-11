@@ -68,6 +68,14 @@ var trigger_rules = {
             "right arrow": ['0,-1', '1,-1', '1,0', '1,1', '2,-1', '2,0', '2,1'],
             "left arrow": ['0,-1', '-1,-1', '0,1', '-1,1']
         }
+    },
+    "teleport": {  // how teleporting triggers elements is mostly guesswork
+        "player": {
+            "right arrow": ['2,0', '1,0', '2,1', '1,1', '2,-1', '1,-1'],  // e.g. Level 3
+            "left arrow": ['-2,0', '-1,0', '-2,1', '-1,1', '-2,-1', '-1,-1'],
+            "boulder": ['-1,-1', '-1,-2', '0,-1', '0,-2', '1,-1', '1,-2'],
+            "balloon": ['-1,1', '-1,2', '0,1', '0,2', '1,1', '1,2']
+        }
     }
 }
 
@@ -86,11 +94,13 @@ function triggers(x1, y1, x2, y2, type = '') {
     // certain element types can trigger only when moving in certain directions
 
     switch(type){
+
         case 'player':     // can trigger in any direction
-            if(dx > 0) dir = 'right';
+            if(Math.abs(dx) + Math.abs(dy) > 1) dir = 'teleport';
+            else if(dx > 0) dir = 'right';
             else if(dx < 0) dir = 'left';
             else if(dy > 0) dir = 'up';
-            else if(dy < 0) dir = 'down';
+            else dir = 'down';
             break;
 
         case 'boulder':    // can trigger by downward motion

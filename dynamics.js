@@ -10,9 +10,9 @@
 
 var rules = {
     "player": {
-        "top": { "boulder": "killed" },
-        "side": { "boulder": "no", "right arrow": "killed", "left arrow": "killed" },
-        "bottom": { "balloon": "no" }
+        "top": { "boulder": "killed", "big monster": "killed" },
+        "side": { "boulder": "no", "right arrow": "killed", "left arrow": "killed", "big monster": "killed" },
+        "bottom": { "balloon": "no", "big monster": "killed" },
     },
     
     // edible (non-directional)
@@ -54,6 +54,15 @@ var rules = {
         },
         "top": { "any": "no" },
         "bottom": { "any": "no" }
+    },
+    "big monster": {
+        "any": {
+            "player": "killed",
+            "left arrow": "eat",
+            "right arrow": "eat",
+            "boulder": "no",
+            "balloon": "no"
+        }
     }
 }
 
@@ -61,6 +70,7 @@ var rules = {
 // manage the logic of any object moving from one grid cell to another
 
 function approach(x1, y1, x2, y2, approacher, deadly) {
+    
     if(x2 < 1 || x2 > 40 || y2 < 1 || y2 > 16) return false;  // edge of canvas
     // if(verbose) console.log( `approach ${x1}, ${y1}, ${x2}, ${y2}, ${approacher}` );
 
@@ -101,10 +111,10 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
             if(occupant_type === 'diamond') {
                 diamonds_collected ++;
                 document.getElementById('diamondsRemaining').textContent = "💎 " + (diamonds_target - diamonds_collected);
-                // create_this.sound.play('sound-diamond');
+                if(sound) create_this.sound.play('sound-diamond');
             }
             else if(occupant_type === 'add moves') moves_remaining += 250;
-            // else if(occupant_type === 'dirt') create_this.sound.play('sound-tick');
+            else if(sound && occupant_type === 'dirt') create_this.sound.play('sound-tick');
             kill_element(occupant_id);
             return true;
         
@@ -112,10 +122,11 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
             e[playerID].x = portal_out.x;
             e[playerID].y = portal_out.y;
             kill_element(occupant_id); // remove teleporter from screen
-            e[playerID].sprite.x = mapX(e[playerID].x) + 10;
-            e[playerID].sprite.y = mapY(e[playerID].y) + 13;
-            // create_this.sound.play('sound-teleport');
-            return false; 
+            e[playerID].sprite.x = mapX(e[playerID].x);
+            e[playerID].sprite.y = mapY(e[playerID].y);
+            triggers(x2, y2, portal_out.x, portal_out.y, type = 'player');
+            if(sound) create_this.sound.play('sound-teleport');
+            return false;
 
         case 'killed':
             if(!deadly) return false; // could break stuff??
@@ -124,23 +135,30 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
     
             if(approacher == 'boulder'){
                 message('messenger', "Killed by a falling boulder!");
-                // create_this.sound.play('sound-boulder-killed');
+                if(sound) create_this.sound.play('sound-boulder-killed');
             }
             else if(['left arrow', 'right arrow'].indexOf(approacher) >  -1) {
                 message('messenger', 'Killed by a speeding arrow!');
-                // create_this.sound.play('sound-arrow');
+                if(sound) create_this.sound.play('sound-arrow');
             }
             else if(approacher == 'player') {
-                if(occupant_type == 'fire'){
+                if(occupant_type == 'fire') {
                     message('messenger', "You were killed by an exploding landmine!");
-                    // create_this.sound.play('sound-fire');
+                    if(sound) create_this.sound.play('sound-fire');
                 }
-            } else message('messenger', "Unknown cause of death please investigate");
+                else if(occupant_type == 'big monster') {
+                    message('messenger', "You were killed by a hungry monster!");
+                }
+            } 
+            else if(approacher == 'big monster') {
+                message('messenger', "You were killed by a hungry monster!");
+            }
+            else message('messenger', "Unknown cause of death please investigate");
             return false;
 
         case 'exit':
             if(diamonds_collected == diamonds_target) {
-                message('messenger', 'Level complete!', 'Next level', 'next_level();');
+                message('messenger', 'Level complete!', 'next');
                 return true;
             } else return false;
 
@@ -154,9 +172,9 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
             if(push_cell >= 0) return false;
             e[occupant_id].x = x3;
             e[occupant_id].y = y3;
-            e[occupant_id].sprite.x = mapX(x3) + 10;
-            e[occupant_id].sprite.y = mapY(y3) + 13;
-            console.log(`added ${occupant_id} to queue 1`);
+            e[occupant_id].sprite.x = mapX(x3);
+            e[occupant_id].sprite.y = mapY(y3);
+            if(verbose) console.log(`added ${occupant_id} to queue 1`);
             if(queue.indexOf(occupant_id) === -1) queue.push(occupant_id);  // once pushed an object becomes mobile
             // move(occupant_id, occupant_type); // once pushed an object becomes mobile
             return true;
@@ -275,8 +293,8 @@ function move(id, type = '', deadly = false) {
             e[id].x = xy[0];
             e[id].y = xy[1];
         }
-        e[id].sprite.x = mapX(e[id].x) + 10;
-        e[id].sprite.y = mapY(e[id].y) + 13;
+        e[id].sprite.x = mapX(e[id].x);
+        e[id].sprite.y = mapY(e[id].y);
         
         // triggers
         triggers(x1, y1, e[id].x, e[id].y, type);

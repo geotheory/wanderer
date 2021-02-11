@@ -4,67 +4,26 @@
     position: absolute;
     display: none;
     padding: 20px;
-    width: 400px;
-    top: 515px;
+    width: 500px;
+    top: 300px;
     left: 0;
     right: 0;
-    background-color: #444444;
+    background-color: #666;
     color:white;
-    font-size: 1.3em;
+    font-size: 1.4em;
+    text-align-last: center;
     z-index: 100;
-}
-
-.btn {
-    padding: 5px;
-    background-color: yellow;
-    font-weight: bold;
-    font-size: 12px;
-    color: #666;
-    cursor: pointer;
-}
-
-.closebtn {
-    margin-left: 10px;
-    float: right;
-}
-
-.btn:hover {
-  color: black;
-  font-weight: bold;
-}
-
-.fa {
-    cursor: pointer;
-}
-
-canvas {
-    position: absolute;
-    top:115px;
-    left: 0;
-    right: 0;
-    margin:auto;
-}
-
-#header {
-    font-size: 20px;
-    color: white;
-    background-color: #444;
-    width: 800px;
-    height: 60px;
-    position: absolute;
-    top:5px;
-    left: 0;
-    right: 0;
-    margin:auto;
 }
 
 #refreshButton {
     float:right;
-    height: 30px !important;
-    width: 80px !important;
     cursor: pointer;
 }
 
 body {
     background-color: #444;
+}
+
+span {
+    color: #ddd;
 }
