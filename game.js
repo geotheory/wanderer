@@ -144,6 +144,7 @@ function id_element(x, y) {
 }
 
 function kill_element(id) {
+    if(id === -1) return;       // enables e.g. kill_element(id_element(x,y))
     e[id].sprite.destroy(true); // remove from canvas
     e[id].x = -1;               // prevent id_element() identifying them
 }

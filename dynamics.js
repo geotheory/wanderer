@@ -119,6 +119,7 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
             return true;
         
         case 'teleport':
+            kill_element(id_element(portal_out.x, portal_out.y)); // eat anything at portal out
             e[playerID].x = portal_out.x;
             e[playerID].y = portal_out.y;
             kill_element(occupant_id); // remove teleporter from screen

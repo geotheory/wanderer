@@ -3,7 +3,7 @@
 
 function message(id, msg, fun = 'killed') {
     var x = document.getElementById(id);
-    var new_html = `<h4>${msg}</h4><h5>[ any key to return ]</h5>`;
+    var new_html = `<h4>${msg}</h4><h5>any key to return..</h5>`;
     x.innerHTML = new_html;
     x.style.display = "block";
     document.addEventListener('keydown', function(event) {
