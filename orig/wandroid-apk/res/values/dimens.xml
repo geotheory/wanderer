@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="mediumScrollThreshHoldFactor">1.7999878px</dimen>
-    <dimen name="scrollThreshHoldRangeFactor">0.00999999px</dimen>
-</resources>

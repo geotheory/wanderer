@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout style="@style/WrapContent"
-  xmlns:a="http://schemas.android.com/apk/res/android">
-    <TextView a:tag="@string/labelTag" style="@style/StatusTextViewLabel" />
-    <TextView a:tag="@string/textTag" style="@style/StatusTextViewValue" />
-</LinearLayout>

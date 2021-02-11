@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout a:orientation="vertical" style="@style/FillParent"
-  xmlns:a="http://schemas.android.com/apk/res/android">
-    <TextView a:text="@string/settingsGestureSensivityLabel" style="@style/SettingsEntry" />
-    <SeekBar a:id="@id/gestureSensivitySeekBar" style="@style/SettingsEntry" />
-    <TextView a:text="@string/settingsBlinkFrequencyLabel" style="@style/SettingsEntry" />
-    <SeekBar a:id="@id/blinkFrequencySeekBar" style="@style/SettingsEntry" />
-</LinearLayout>

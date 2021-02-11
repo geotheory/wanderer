@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu
-  xmlns:a="http://schemas.android.com/apk/res/android">
-    <item a:icon="@android:drawable/ic_menu_info_details" a:id="@id/menuCredits" a:title="@string/menuCreditsLabel" a:alphabeticShortcut="@string/menuCreditsShortcut" />
-    <item a:icon="@android:drawable/ic_menu_help" a:id="@id/menuHelp" a:title="@string/menuHelpLabel" a:alphabeticShortcut="@string/menuHelpShortcut" />
-    <item a:icon="@android:drawable/ic_menu_preferences" a:id="@id/menuSettings" a:title="@string/menuSettingsLabel" a:alphabeticShortcut="@string/menuSettingsShortcut" />
-    <item a:icon="@android:drawable/ic_menu_set_as" a:id="@id/menuLevel" a:title="@string/menuLevelLabel" a:alphabeticShortcut="@string/menuLevelShortcut" />
-</menu>
