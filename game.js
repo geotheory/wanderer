@@ -236,14 +236,14 @@ function update () {
 
     if( !input_sleeping && !hold ) {
 
-        if(cursors.left.isDown | cursors.right.isDown | cursors.up.isDown | cursors.down.isDown) {
+        if(cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown || swipeX || swipeY) {
 
             // key inputs
             var dx = 0, dy = 0, x1, y1, x2, y2;
-            if (cursors.left.isDown) { dx = -1; }
-            else if (cursors.right.isDown) { dx = 1; }
-            else if (cursors.down.isDown) { dy = -1; }
-            else if (cursors.up.isDown) { dy = 1; }
+            if ( cursors.left.isDown || swipeX === -1 ) { dx = -1; }
+            else if ( cursors.right.isDown || swipeX === 1 ) { dx = 1; }
+            else if ( cursors.down.isDown || swipeY === 1 ) { dy = -1; }
+            else if ( cursors.up.isDown || swipeY === -1 ) { dy = 1; }
 
             x1 = e[playerID].x;
             y1 = e[playerID].y;
