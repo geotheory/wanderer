@@ -244,6 +244,8 @@ function update () {
             else if ( cursors.right.isDown || swipeX === 1 ) { dx = 1; }
             else if ( cursors.down.isDown || swipeY === 1 ) { dy = -1; }
             else if ( cursors.up.isDown || swipeY === -1 ) { dy = 1; }
+            swipeX = 0;
+            swipeY = 0);
 
             x1 = e[playerID].x;
             y1 = e[playerID].y;
