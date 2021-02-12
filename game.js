@@ -3,7 +3,7 @@
 
 var level, lines, level_title, level_moves, cursors, playerID, input_sleeping, 
     diamonds_target, diamonds_collected, moves_remaining, portal_out,
-    monster, monsterID, cookies,
+    monster, monster_move, monsterID, cookies,
     e = [],       // main container for elements and their sprites. Order is preserved so e[n].id is their array index
     queue = [],   // element triggers not actioned immediately are queued
     busy = false, // pause everything while an element is moving
@@ -232,7 +232,39 @@ function update () {
             if(moved) break;
         }
     }
-    else hold = false;
+    else {
+        hold = false;
+        if(monster && monster_move){
+            var freex = false, freey = false;
+        
+            var dx = e[playerID].x - e[monsterID].x;
+            if(dx !== 0) freex = approach(e[monsterID].x, e[monsterID].y, e[monsterID].x + Math.sign(dx), e[monsterID].y, 'big monster', deadly=true);
+            
+            var dy = e[playerID].y - e[monsterID].y;
+            if(dy !== 0) freey = approach(e[monsterID].x, e[monsterID].y, e[monsterID].x, e[monsterID].y + Math.sign(dy), 'big monster', deadly=true);
+            
+            var monster_decision = 'none';
+            if(Math.abs(dx) > Math.abs(dy)) {  // x has priority
+                if(freex) monster_decision = 'x';
+                else if(freey) monster_decision = 'y';
+            }
+            else {    // y has priority
+                if(freey) monster_decision = 'y';
+                else if(freex) monster_decision = 'x';
+            }
+    
+            // action move
+            if( monster_decision == 'x' ) {
+                e[monsterID].x += Math.sign(dx);
+                e[monsterID].sprite.x = mapX(e[monsterID].x);
+            }
+            else if( monster_decision == 'y' ) {
+                e[monsterID].y += Math.sign(dy);
+                e[monsterID].sprite.y = mapY(e[monsterID].y);
+            }
+            monster_move = false;
+        }
+    }
 
     if( !input_sleeping && !hold ) {
 
@@ -278,36 +310,8 @@ function update () {
                 // triggers
                 triggers(x1, y1, x2, y2, 'player');
             }
-
-            // big monster move
-            if(monster){
-                var freex = false, freey = false;
-                var dx = e[playerID].x - e[monsterID].x;
-                if(dx !== 0) freex = approach(e[monsterID].x, e[monsterID].y, e[monsterID].x + Math.sign(dx), e[monsterID].y, 'big monster');
-                var dy = e[playerID].y - e[monsterID].y;
-                if(dy !== 0) freey = approach(e[monsterID].x, e[monsterID].y, e[monsterID].x, e[monsterID].y + Math.sign(dy), 'big monster');
-                
-                var monster_decision = 'none';
-                if(Math.abs(dx) > Math.abs(dy)) {  // x has priority
-                    if(freex) monster_decision = 'x';
-                    else if(freey) monster_decision = 'y';
-                }
-                else {    // y has priority
-                    if(freey) monster_decision = 'y';
-                    else if(freex) monster_decision = 'x';
-                }
-
-                // action move
-                if( monster_decision == 'x' ) {
-                    e[monsterID].x += Math.sign(dx);
-                    e[monsterID].sprite.x = mapX(e[monsterID].x);
-                }
-                else if( monster_decision == 'y' ) {
-                    e[monsterID].y += Math.sign(dy);
-                    e[monsterID].sprite.y = mapY(e[monsterID].y);
-                }
-            }
             
+            monster_move = true;
             input_sleeping = true;
             var sleeptime = [150, 30][ (keydown > 0)+0 ];
             keydown++;

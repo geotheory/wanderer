@@ -60,7 +60,7 @@ var rules = {
             "player": "killed",
             "left arrow": "eat",
             "right arrow": "eat",
-            "boulder": "no",
+            "boulder": "eat",
             "balloon": "no"
         }
     }
@@ -98,9 +98,9 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
         mid_branch = top_branch[dir];
     }
     mid_branch_keys = Object.keys(mid_branch);
-    if( mid_branch_keys.indexOf(approacher) > -1 ) {
-        rule = mid_branch[approacher];
-    } else rule = mid_branch["other"];
+        if( mid_branch_keys.indexOf(approacher) > -1 ) {
+            rule = mid_branch[approacher];
+        } else rule = mid_branch["other"];
 
     switch(rule) {
 
@@ -108,15 +108,30 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
             return false;
 
         case 'eat':
-            if(occupant_type === 'diamond') {
-                diamonds_collected ++;
-                document.getElementById('diamondsRemaining').textContent = "💎 " + (diamonds_target - diamonds_collected);
-                if(sound) create_this.sound.play('sound-diamond');
+            
+            switch(occupant_type){
+
+                case 'diamond':
+                    diamonds_collected ++;
+                    document.getElementById('diamondsRemaining').textContent = "💎 " + (diamonds_target - diamonds_collected);
+                    if(sound) create_this.sound.play('sound-diamond');
+                    break;
+
+                case 'add moves':
+                    moves_remaining += 250;
+                    break;
+
+                case 'dirt':
+                    if(sound) create_this.sound.play('sound-tick');
+                    break;
+                
+                case 'big monster':
+                    console.log('big monster was killed');
+                    break;
             }
-            else if(occupant_type === 'add moves') moves_remaining += 250;
-            else if(sound && occupant_type === 'dirt') create_this.sound.play('sound-tick');
             kill_element(occupant_id);
             return true;
+
         
         case 'teleport':
             kill_element(id_element(portal_out.x, portal_out.y)); // eat anything at portal out
@@ -130,33 +145,48 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
             return false;
 
         case 'killed':
-            if(!deadly) return false; // could break stuff??
+            // if(!deadly) return false; // what  was this for?
             dead = true;
             e[playerID].sprite.setTexture('player-dead');
-    
-            if(approacher == 'boulder'){
-                message('messenger', "Killed by a falling boulder!");
-                if(sound) create_this.sound.play('sound-boulder-killed');
-            }
-            else if(['left arrow', 'right arrow'].indexOf(approacher) >  -1) {
-                message('messenger', 'Killed by a speeding arrow!');
-                if(sound) create_this.sound.play('sound-arrow');
-            }
-            else if(approacher == 'player') {
-                if(occupant_type == 'fire') {
-                    message('messenger', "You were killed by an exploding landmine!");
-                    if(sound) create_this.sound.play('sound-fire');
-                }
-                else if(occupant_type == 'big monster') {
-                    message('messenger', "You were killed by a hungry monster!");
-                }
-            } 
-            else if(approacher == 'big monster') {
-                message('messenger', "You were killed by a hungry monster!");
-            }
-            else message('messenger', "Unknown cause of death please investigate");
-            return false;
 
+            switch(approacher){
+
+                case 'boulder':
+                    message('messenger', "Killed by a falling boulder!");
+                    if(sound) create_this.sound.play('sound-boulder-killed');
+                    break;
+
+                case 'left arrow':
+                    message('messenger', 'Killed by a speeding arrow!');
+                    if(sound) create_this.sound.play('sound-arrow');
+                    break;
+                
+                case 'right arrow':
+                    message('messenger', 'Killed by a speeding arrow!');
+                    if(sound) create_this.sound.play('sound-arrow');
+                    break;
+
+                case 'player':
+                    if(occupant_type == 'fire') {
+                        message('messenger', "You were killed by an exploding landmine!");
+                        if(sound) create_this.sound.play('sound-fire');
+                    }
+                    else if(occupant_type == 'big monster') {
+                        message('messenger', "You were killed by a hungry monster!");
+                    }
+                    else message('messenger', "Unknown cause of death please investigate 1");
+                    break;
+                
+                case 'big monster':
+                    message('messenger', "You were killed by a hungry monster!");
+                    break;
+                
+                case 'big monster':
+                    message('messenger', "You were killed by a baby monster");
+                    break;
+                
+            }
+    
         case 'exit':
             if(diamonds_collected == diamonds_target) {
                 message('messenger', 'Level complete!', 'next');

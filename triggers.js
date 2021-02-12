@@ -105,22 +105,22 @@ function triggers(x1, y1, x2, y2, type = '') {
 
         case 'boulder':    // can trigger by downward motion
             if(dy < 0) dir = 'down';
-            else return;
+            else return;   // we assume that sideways or diagonal (deflected) movement does not trigger others
             break;
 
         case 'left arrow': // can trigger by leftward motion
             if(dx < 0) dir = 'left';
-            else return;
+            else return;   // see boulder assumption
             break;
 
         case 'right arrow': // etc
             if(dx > 0) dir = 'right';
-            else return;
+            else return;    // // see boulder assumption
             break;
 
         case 'balloon':     // can trigger by upward motion
             if(dy > 0) dir = 'up';
-            else return;
+            else return;    // // see boulder assumption
             break;
     }
 
@@ -133,7 +133,7 @@ function triggers(x1, y1, x2, y2, type = '') {
     //   - lower boulders always trigger before higher ones, or more nuanced?
     //   - which triggers are queued and which trigger instantly?
 
-    neighbours = tidy(neighbours, arrange(['y',desc('x')]) );
+    neighbours = tidy(neighbours, arrange([desc('y'),desc('x')]) );
 
     for(var i=0; i<neighbours.length; i++) {
         var n = neighbours[i];
