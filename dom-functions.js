@@ -3,13 +3,19 @@
 
 function message(id, msg, fun = 'killed') {
     var x = document.getElementById(id);
-    var new_html = `<h4>${msg}</h4><h5>any key to return..</h5>`;
+    var new_html = `<h4>${msg}</h4><h5>press return..</h5>`;
     x.innerHTML = new_html;
     x.style.display = "block";
-    document.addEventListener('keydown', function(event) {
-        if(fun === 'killed') reset_level();
-        else next_level();
-    }, {once: true});
+    function space(){
+        document.addEventListener('keydown', function(event) {
+            if (event.keyCode === 13) {
+                console.log('return');
+                if(fun === 'killed') reset_level();
+                else next_level();
+            } else space();
+        }, { once: true });
+    }
+    space();
 }
 
 // message('messenger', "Killed by a falling boulder!");
@@ -17,13 +23,31 @@ function message(id, msg, fun = 'killed') {
 {/* <button id="refreshButton" class="btn" onclick="reset_level()"><i class="fa fa-repeat" onclick="reset_level()"> RESET</i></button> */}
 
 document.onkeyup = function(event) {
-    if (event.keyCode === 27) {
-        document.getElementById('messenger').style.display='none';
+
+    switch(event.keyCode){
+
+        // arrow keys
+        case 37:
+        case 38:
+        case 39:
+        case 40:
+            keydown = 0;
+            return;
+        
+        case 32: // spacebar
+            reset_level();
+            return;
+
     }
-    else if([37,38,39,40].indexOf(event.keyCode) > -1) {
-        keydown = 0;
-        // input_sleeping = false;
-    }
+
+    // if (event.keyCode === 27) {
+    //     document.getElementById('messenger').style.display='none';
+    // }
+    // else if([37,38,39,40].indexOf(event.keyCode) > -1) {
+    //     keydown = 0;
+    //     // input_sleeping = false;
+    // }
+    
     // else if space for no move move
 }
 
