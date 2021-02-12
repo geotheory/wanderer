@@ -3,16 +3,18 @@
 
 ## Game play
 
+- separate boulder queue?
 - move to recursive logic for triggering of some object interactions. More distant interactions are queued?
     - arrows passing directly underneath boulders trip immediately (recursively)
 - boulder rules for trigger prioritisation
 - implement monsters
-    - big monsters chase
+    - big monsters sidesteps when perpendicular and blocked
     - baby monsters follow maze left?
 
 ## Style
 
 - svg boulder
+- mobile handling
 
 
 -------------------------------------------------------------

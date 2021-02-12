@@ -126,7 +126,7 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
                     break;
                 
                 case 'big monster':
-                    console.log('big monster was killed');
+                    // points?
                     break;
             }
             kill_element(occupant_id);
@@ -145,7 +145,7 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
             return false;
 
         case 'killed':
-            // if(!deadly) return false; // what  was this for?
+            if(!deadly) return false; // elements must move 1 cell before becoming deadly
             dead = true;
             e[playerID].sprite.setTexture('player-dead');
 
@@ -329,7 +329,7 @@ function move(id, type = '', deadly = false) {
         
         // triggers
         triggers(x1, y1, e[id].x, e[id].y, type);
-        sleep(speed).then(() => { move(id, type, true); });
+        sleep(speed).then(() => { move(id, type, deadly = true); });
         return true;  // so queue handler knows if a movement took place
     } else {
         busy = false;
