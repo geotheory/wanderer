@@ -18,10 +18,6 @@ function message(id, msg, fun = 'killed') {
     space();
 }
 
-// message('messenger', "Killed by a falling boulder!");
-
-{/* <button id="refreshButton" class="btn" onclick="reset_level()"><i class="fa fa-repeat" onclick="reset_level()"> RESET</i></button> */}
-
 document.onkeyup = function(event) {
 
     switch(event.keyCode){
@@ -34,21 +30,11 @@ document.onkeyup = function(event) {
             keydown = 0;
             return;
         
-        case 32: // spacebar
+        case 32: // spacebar always resets
             reset_level();
             return;
 
     }
-
-    // if (event.keyCode === 27) {
-    //     document.getElementById('messenger').style.display='none';
-    // }
-    // else if([37,38,39,40].indexOf(event.keyCode) > -1) {
-    //     keydown = 0;
-    //     // input_sleeping = false;
-    // }
-    
-    // else if space for no move move
 }
 
 // level choice
