@@ -1,4 +1,7 @@
-sounds from https://sfxr.me/
 
-https://www.steveshipway.org/software/wanderer/f_wanderer.html
-
+- https://www.steveshipway.org/software/wanderer/f_wanderer.html
+- https://github.com/sshipway/wanderer
+- wikimedia.org for open source vector art
+- Phaser game engine
+- tidy.js for advanced array sorting
+- sounds from https://sfxr.me/

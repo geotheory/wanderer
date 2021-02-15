@@ -2,7 +2,7 @@
 // interactivity and info messaging
 
 function message(id, msg, fun = 'killed') {
-    hold = true;
+    hold_dead = true;
     var x = document.getElementById(id);
     var new_html = `<h4>${msg}</h4><h5>press return..</h5>`;
     x.innerHTML = new_html;
@@ -10,7 +10,6 @@ function message(id, msg, fun = 'killed') {
     function enter(){
         document.addEventListener('keydown', function(event) {
             if (event.keyCode === 13) {
-                // hold = true;
                 if(fun === 'killed') reset_level();
                 else next_level();
             } else enter();
@@ -48,8 +47,9 @@ document.onkeyup = function(event) {
 // level choice
 
 function reset_level() {
+    queue = [];
     dead = true;
-    hold = true;
+    busy = false; // to pause monsters
     document.getElementById('messenger').style.display='none';
 }
 

@@ -130,6 +130,7 @@ var trigger_rules = {
 // function offset(x1, y1, x2, y2) { return String(x1 - x2) + ',' + String(y1 - y2); }
 
 function triggers(x1, y1, x2, y2, type = '') {
+    if(kill) return;
     // if(x1 == 6 && y1 ==13) console.log(x1, y1, x2, y2, type);
     // console.log(x1, y1, x2, y2, type);
     if(type === '') {

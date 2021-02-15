@@ -135,33 +135,23 @@ function load_level(level_number) {
     // render player sprites last
     e[playerID].sprite = create_this.add.image(mapX(e[playerID].x), mapY(e[playerID].y), 'player');
     cursors = create_this.input.keyboard.createCursorKeys();
+    queue = [];
     busy = false;
-    hold = false;
+    hold_move = false;
+    hold_dead = false;
     dead = false;
+    kill = false;
 }
 
 
 // e[] index position of any element at coordinates (x,y). Multiple elements mostly cannot co-occupy 
-// the same cell. The only exceptions to this are:
-// 1. baby monsters can traverse dirt. This is a simple logical check.
-// 2. multiple baby monsters can occupy the same cell.
-// 3. boulders can pass through baby monsters. We assume arrows and balloons can also. To avoid
-//    a clash we assume the target is not the baby monster unless specified by 'type' param.
+// the same cell. The only exceptions to this are baby monsters which do not interact with other mobile
+// elements except the player.
 
 function id_element(x, y, type = undefined) {
     match = e.filter(i => i.x == x && i.y == y);
+    if(match.length > 1 && type !== 'player') match = match.filter(m => m.type !== 'baby monster');
     if(match.length == 0) return -1;
-    if(match.length > 1) {
-        var non_dirt = match.filter(m => m.type !== 'dirt');
-        if(non_dirt.length === 1) return non_dirt[0].id;
-        if(type === undefined) return match.filter(m => m.type !== 'baby monster')[0].id;
-
-
-        if(match.filter(m => ['dirt','baby monster'].indexOf(m.type) === -1).length > 0){
-            throw 'error in id_element(' + x + ',' + y + '): multiple elements at coordinates';
-        }
-        else match = match.filter(m => m.type !== 'dirt')
-    }
     return match[0].id;
 }
 
@@ -251,7 +241,6 @@ function update () {
         }
     }
     else {
-        // hold = false;
         
         // monster moves
         if(monster_move) {
@@ -299,17 +288,24 @@ function update () {
         return;
     }
 
-    if( !input_sleeping && !hold ) {
+    if( !input_sleeping && !hold_move && !hold_dead ) {
 
         if(cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown || return_press || swipeX || swipeY) {
             
+            if(moves_remaining !== 99999){
+                moves_remaining--;
+                document.getElementById('movesRemaining').textContent = "⏳ " + moves_remaining;
+                if(moves_remaining <= 0) {
+                    dead = true;
+                    e[playerID].sprite.setTexture('player-dead');
+                    message('messenger', "You ran out of time!");
+                    // hold = true;
+                }
+            }
+
             if(return_press){
                 console.log();
                 return_press = false;
-                if(moves_remaining !== 99999){
-                    moves_remaining--;
-                    document.getElementById('movesRemaining').textContent = "⏳ " + moves_remaining;
-                }
                 monster_move = true;
                 return;
             }
@@ -342,16 +338,6 @@ function update () {
                 e[playerID].sprite.x = mapX(e[playerID].x);
                 e[playerID].sprite.y = mapY(e[playerID].y);
                 
-                if(moves_remaining !== 99999) moves_remaining--;
-                document.getElementById('movesRemaining').textContent = "⏳ " + [moves_remaining, 'unlimited'][(moves_remaining === 99999)+0];
-
-                if(moves_remaining === 0) {
-                    dead = true;
-                    e[playerID].sprite.setTexture('player-dead');
-                    message('messenger', "You ran out of time!");
-                    hold = true;
-                }
-
                 // triggers
                 triggers(x1, y1, x2, y2, 'player');
             }

@@ -87,7 +87,7 @@ function approach(x1, y1, x2, y2, approacher, deadly, approacher_id) {
     if(x2 < 1 || x2 > 40 || y2 < 1 || y2 > 16) return false;  // edge of canvas
     // if(verbose) console.log( `approach ${x1}, ${y1}, ${x2}, ${y2}, ${approacher}` );
 
-    var occupant_id = id_element(x2, y2);
+    var occupant_id = id_element(x2, y2, approacher);
     if(occupant_id === -1) return true;  // cell is unoccupied
     
     var occupant_type = e[occupant_id].type;
@@ -200,7 +200,8 @@ function approach(x1, y1, x2, y2, approacher, deadly, approacher_id) {
                             message('messenger', "You were killed by the little monsters!");
                             break;
                         default:
-                            message('messenger', "Unknown cause of death please investigate");
+                            message('messenger', "Unknown cause of death please investigate 1");
+                            break;
                     }
                     break;
                 
@@ -212,8 +213,12 @@ function approach(x1, y1, x2, y2, approacher, deadly, approacher_id) {
                     message('messenger', "You were killed by the little monsters!");
                     break;
                 
+                default:
+                    message('messenger', "Unknown cause of death please investigate 2");
+                    break;
             }
-            hold = true;
+            kill = true;
+            busy = true;
             return false;
     
         case 'exit':
@@ -322,8 +327,9 @@ function approach(x1, y1, x2, y2, approacher, deadly, approacher_id) {
 // dynamic logic for mobile elements
 
 function move(id, type = '', deadly = false) {
-    busy = true;  // pause other elements
-    hold = true;  // pause user inputs
+    if(kill) return false;
+    busy = true;     // pause other elements
+    hold_move = true;     // pause user inputs
     if(verbose) console.log('move ' + String(id));
     if(type === '') type = e[id].type;
     
@@ -361,7 +367,7 @@ function move(id, type = '', deadly = false) {
         return true;  // so queue handler knows if a movement took place
     } else {
         busy = false;
-        hold = false;
+        hold_move = false;
         if(verbose) console.log( `end move ${id}` );
         return false
     }

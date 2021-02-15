@@ -49,7 +49,7 @@ function baby_monster_move(id) {
             break;
         }
         else {
-            if( ['player', 'cage', 'dirt'].indexOf(elements[i].type) > -1 ) {
+            if( ['player', 'cage', 'dirt', 'baby monster'].indexOf(elements[i].type) > -1 ) {
                 new_dir = priorities[i];
                 break;
             }
@@ -86,7 +86,7 @@ function baby_monster_initialise(id) {
 
     var environ = offsets.map(o => check_wall(m.x, m.y, o));
     var objects = environ.filter(i => i > -1) // ignore vacant cells and player/cages
-                         .filter(i => ['player', 'cage', 'dirt'].indexOf(e[i].type) === -1);
+                         .filter(i => ['player', 'cage', 'dirt', 'baby monster'].indexOf(e[i].type) === -1);
     // select first match and set initial direction
     if(objects.length > 0) {
         var anchor_id = environ.indexOf(objects[0]);
