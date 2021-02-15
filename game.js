@@ -1,20 +1,6 @@
 
 // Game setup and Phaser flow
 
-var level, lines, level_title, level_moves, cursors, playerID, input_sleeping, 
-    diamonds_target, diamonds_collected, moves_remaining, portal_out,
-    monster, monster_move, monsterID, cookies,
-    e = [],       // main container for elements and their sprites. Order is preserved so e[n].id is their array index
-    queue = [],   // element triggers not actioned immediately are queued
-    busy = false, // pause everything while an element is moving
-    hold = false; // hold player's movement until all triggers complete
-    dead = false, // true when killed
-    keydown = 0,  // keypress timer
-    speed = 30,   // delay of moving objects (lower = faster)
-    create_this = 0, // globalise the create() function's methods for level management
-    sound = false,
-    verbose = false;
-
 var w = document.getElementById('main').offsetWidth;
 var h = 1.25 * 16 * w / 40;
 var cellW = w / 40;
@@ -51,20 +37,26 @@ var elements = {
     "B": "bomb"
 };
 
+// general sleeper function
 const sleep = (milliseconds) => { return new Promise(resolve => setTimeout(resolve, milliseconds)) }  
 
+// tidy.jd tool for ordering object arrays by multiple variables
 const { tidy, mutate, arrange, desc } = Tidy;
+
 
 // reads in data and builds the level. Accepts level number and option to purge existing level
 
 function load_level(level_number) {
+    console.log('loading level ', level_number);
     
     level_num = level_number;
     saveCookie('current_level', level_num);
 
+    // remove all elements and sprites
     if(create_this.children.list.length > 0) create_this.children.list = [];
     e = [];
 
+    // var data = create_this.cache.text.get(`data`);
     var data = create_this.cache.text.get(`data${level_number}`);
     level = data;
     lines = level.split('\n');
@@ -85,16 +77,31 @@ function load_level(level_number) {
             if(elements[key] != 'space' && elements[key] != 'portal out') e.push(new_element);
             if(elements[key] == 'portal out') portal_out = { "x": x, "y": y };
             if(new_element.type === 'big monster'){
-                monster = true;
+                big_monster = true;
                 monsterID = new_element.id;
             }
         }
     }
 
-    diamonds_target = e.filter(i => i.type == 'diamond').length;
+    baby_monsters = e.filter(i => i.type == 'baby monster').map(i => i.id); // ids
+    diamonds_target = e.filter(i => i.type == 'diamond').length + baby_monsters.length;
     diamonds_collected = 0;
     document.getElementById('diamondsRemaining').textContent = "💎 " + (diamonds_target - diamonds_collected);
 
+    if(baby_monsters.length > 0){
+        var k = e.length;
+        for( var x = 1; x <= 40; x++ ) {
+            e.push({ "id": k, "key": "#", "type": "light wall", "x": x, "y": 0 });
+            e.push({ "id": k+1, "key": "#", "type": "light wall", "x": x, "y": 17 });
+            k += 2;
+        }
+        for( var y = 1; y <= 16; y++ ) {
+            e.push({ "id": k, "key": "#", "type": "light wall", "x": 0, "y": y });
+            e.push({ "id": k+1, "key": "#", "type": "light wall", "x": 41, "y": y });
+            k += 2;
+        }
+    }
+    
     // this.add.image(400, 200, 'mist');
     var dark_wall_graphics = create_this.add.graphics({ fillStyle: { color: 0x777777 } });
     var light_wall_graphics = create_this.add.graphics({ fillStyle: { color: 0x888888 } });
@@ -135,11 +142,27 @@ function load_level(level_number) {
 }
 
 
-// e index position of any element at coordinates (x,y)
-function id_element(x, y) {
+// e[] index position of any element at coordinates (x,y). Multiple elements mostly cannot co-occupy 
+// the same cell. The only exceptions to this are:
+// 1. baby monsters can traverse dirt. This is a simple logical check.
+// 2. multiple baby monsters can occupy the same cell.
+// 3. boulders can pass through baby monsters. We assume arrows and balloons can also. To avoid
+//    a clash we assume the target is not the baby monster unless specified by 'type' param.
+
+function id_element(x, y, type = undefined) {
     match = e.filter(i => i.x == x && i.y == y);
-    if(match.length > 1) throw 'error in id_element(' + x + ',' + y + '): multiple elements at coordinates';
     if(match.length == 0) return -1;
+    if(match.length > 1) {
+        var non_dirt = match.filter(m => m.type !== 'dirt');
+        if(non_dirt.length === 1) return non_dirt[0].id;
+        if(type === undefined) return match.filter(m => m.type !== 'baby monster')[0].id;
+
+
+        if(match.filter(m => ['dirt','baby monster'].indexOf(m.type) === -1).length > 0){
+            throw 'error in id_element(' + x + ',' + y + '): multiple elements at coordinates';
+        }
+        else match = match.filter(m => m.type !== 'dirt')
+    }
     return match[0].id;
 }
 
@@ -175,9 +198,7 @@ var config = {
 }
 
 function preload () {
-    for(var i=1; i<=61; i++) this.load.text({ key: `data${i}`, url: `./screens/screen.${i}.txt` });
-    // this.load.text({ key: 'data', url: './screens/screen.1.txt' });
-    // this.load.text({ key: 'data', url: './orig2/wanderer/screens/test' });
+    for(var i=0; i<=61; i++) this.load.text({ key: `data${i}`, url: `./screens/screen.${i}.txt` });
     // this.load.image('mist', 'backgrounds/mist.jpg');
     this.load.svg('diamond', 'sprites/diamond.svg', { scale: 0.43 * scaler });
     this.load.svg('add moves', 'sprites/add-moves.svg', { scale: 0.04 * scaler });
@@ -202,29 +223,27 @@ function preload () {
     this.load.svg('player-down', 'sprites/player-down.svg', { scale: 0.17 * scaler });
     this.load.svg('player-dead', 'sprites/player-dead.svg', { scale: 0.17 * scaler });
 
-    this.load.audio('sound-teleport', 'sounds/teleport.wav');
-    this.load.audio('sound-tick', 'sounds/tick.wav');
-    this.load.audio('sound-diamond', 'sounds/diamond.wav');
-    this.load.audio('sound-fire', 'sounds/fire.wav');
-    this.load.audio('sound-boulder-killed', 'sounds/boulder.wav');
-    this.load.audio('sound-boulder-fall', 'sounds/boulder-fall.wav');
-    this.load.audio('sound-arrow', 'sounds/arrow.wav');
+    // this.load.audio('sound-teleport', 'sounds/teleport.wav');
+    // this.load.audio('sound-tick', 'sounds/tick.wav');
+    // this.load.audio('sound-diamond', 'sounds/diamond.wav');
+    // this.load.audio('sound-fire', 'sounds/fire.wav');
+    // this.load.audio('sound-boulder-killed', 'sounds/boulder.wav');
+    // this.load.audio('sound-boulder-fall', 'sounds/boulder-fall.wav');
+    // this.load.audio('sound-arrow', 'sounds/arrow.wav');
 }
 
 
 function create () {
-
     create_this = this;
     load_level(level_num);
-
 }
 
 
 function update () {
     
-    if(busy || dead) return;
-
-    if(queue.length !== 0){
+    if(busy) return;
+    
+    if(queue.length !== 0) {
         for(var i=0; i<queue.length; i++) {
             var q = queue[i];
             queue = queue.filter((x,ind) => ![i].includes(ind)); // remove from queue
@@ -234,41 +253,68 @@ function update () {
     }
     else {
         hold = false;
-        if(monster && monster_move){
-            var freex = false, freey = false;
         
-            var dx = e[playerID].x - e[monsterID].x;
-            if(dx !== 0) freex = approach(e[monsterID].x, e[monsterID].y, e[monsterID].x + Math.sign(dx), e[monsterID].y, 'big monster', deadly=true);
+        // monster moves
+        if(monster_move) {
+
+            if(big_monster) {
+                var freex = false, freey = false;
             
-            var dy = e[playerID].y - e[monsterID].y;
-            if(dy !== 0) freey = approach(e[monsterID].x, e[monsterID].y, e[monsterID].x, e[monsterID].y + Math.sign(dy), 'big monster', deadly=true);
+                var dx = e[playerID].x - e[monsterID].x;
+                if(dx !== 0) freex = approach(e[monsterID].x, e[monsterID].y, e[monsterID].x + Math.sign(dx), e[monsterID].y, 'big monster', deadly=true, monsterID);
+                
+                var dy = e[playerID].y - e[monsterID].y;
+                if(dy !== 0) freey = approach(e[monsterID].x, e[monsterID].y, e[monsterID].x, e[monsterID].y + Math.sign(dy), 'big monster', deadly=true, monsterID);
+                
+                var monster_decision = 'none';
+                if(Math.abs(dx) > Math.abs(dy)) {  // x has priority
+                    if(freex) monster_decision = 'x';
+                    else if(freey) monster_decision = 'y';
+                }
+                else {    // y has priority
+                    if(freey) monster_decision = 'y';
+                    else if(freex) monster_decision = 'x';
+                }
+        
+                // action move
+                if( monster_decision == 'x' ) {
+                    e[monsterID].x += Math.sign(dx);
+                    e[monsterID].sprite.x = mapX(e[monsterID].x);
+                }
+                else if( monster_decision == 'y' ) {
+                    e[monsterID].y += Math.sign(dy);
+                    e[monsterID].sprite.y = mapY(e[monsterID].y);
+                }
+            }
+
+            // baby monsters
+            baby_monsters = e.filter(i => i.type == 'baby monster').map(i => i.id);
+            baby_monsters.map(id => baby_monster_move(id));
             
-            var monster_decision = 'none';
-            if(Math.abs(dx) > Math.abs(dy)) {  // x has priority
-                if(freex) monster_decision = 'x';
-                else if(freey) monster_decision = 'y';
-            }
-            else {    // y has priority
-                if(freey) monster_decision = 'y';
-                else if(freex) monster_decision = 'x';
-            }
-    
-            // action move
-            if( monster_decision == 'x' ) {
-                e[monsterID].x += Math.sign(dx);
-                e[monsterID].sprite.x = mapX(e[monsterID].x);
-            }
-            else if( monster_decision == 'y' ) {
-                e[monsterID].y += Math.sign(dy);
-                e[monsterID].sprite.y = mapY(e[monsterID].y);
-            }
             monster_move = false;
         }
     }
 
+    if(dead) {
+        console.log('deaded');
+        load_level(level_num);
+        return;
+    }
+
     if( !input_sleeping && !hold ) {
 
-        if(cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown || swipeX || swipeY) {
+        if(cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown || return_press || swipeX || swipeY) {
+            
+            if(return_press){
+                console.log();
+                return_press = false;
+                if(moves_remaining !== 99999){
+                    moves_remaining--;
+                    document.getElementById('movesRemaining').textContent = "⏳ " + moves_remaining;
+                }
+                monster_move = true;
+                return;
+            }
 
             // key inputs
             var dx = 0, dy = 0, x1, y1, x2, y2;
@@ -276,7 +322,7 @@ function update () {
             else if ( cursors.right.isDown || swipeX === 1 ) { dx = 1; }
             else if ( cursors.down.isDown || swipeY === 1 ) { dy = -1; }
             else if ( cursors.up.isDown || swipeY === -1 ) { dy = 1; }
-            swipeX = 0;
+            swipeX = 0; // reset
             swipeY = 0;
 
             x1 = e[playerID].x;
@@ -284,7 +330,7 @@ function update () {
             x2 = x1 + dx;
             y2 = y1 + dy;
 
-            var target_accessible = approach(x1, y1, x2, y2, 'player', 'false');
+            var target_accessible = approach(x1, y1, x2, y2, 'player', 'false', playerID);
 
             if(target_accessible) {
                 // update sprite appearance

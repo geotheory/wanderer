@@ -2,20 +2,21 @@
 // interactivity and info messaging
 
 function message(id, msg, fun = 'killed') {
+    hold = true;
     var x = document.getElementById(id);
     var new_html = `<h4>${msg}</h4><h5>press return..</h5>`;
     x.innerHTML = new_html;
     x.style.display = "block";
-    function space(){
+    function enter(){
         document.addEventListener('keydown', function(event) {
             if (event.keyCode === 13) {
-                console.log('return');
+                // hold = true;
                 if(fun === 'killed') reset_level();
                 else next_level();
-            } else space();
+            } else enter();
         }, { once: true });
     }
-    space();
+    enter();
 }
 
 document.onkeyup = function(event) {
@@ -34,13 +35,21 @@ document.onkeyup = function(event) {
             reset_level();
             return;
 
+        case 13: // return/enter - stationary move
+            return_press = true;
+            return;
+        
+        case 71: // g - grid
+            toggle_grid();
+            return;
     }
 }
 
 // level choice
 
 function reset_level() {
-    load_level(level_num);
+    dead = true;
+    hold = true;
     document.getElementById('messenger').style.display='none';
 }
 
@@ -109,3 +118,23 @@ region.bind(target, 'pan', function(e){
         swipeY = 0;
     });
 })
+
+
+function toggle_grid(){
+    grid = !grid;
+    if(grid){
+        for(var i=1; i<=40; i++) {
+            var x = create_this.add.text(mapX(i)-10, mapY(1)-5, i, { "size": 5, color: 'yellow' });
+            grid_array.push(x);
+        }
+        for(var i=1; i<=16; i++) {
+            var x = create_this.add.text(mapX(1)-10, mapY(i)-5, i, { color: 'yellow' });
+            grid_array.push(x);
+        }
+    }
+    else  {
+        grid_array.map( x => x.destroy() );
+        grid_array = [];
+    }
+}
+

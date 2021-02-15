@@ -19,6 +19,11 @@
 #refreshButton {
     float:right;
     cursor: pointer;
+    background-color: rgb(255, 0, 255);
+    height: 28px !important;
+    line-height: 2rem;
+    font-size: 0.7em;
+    color:yellow;
 }
 
 body {
@@ -27,6 +32,10 @@ body {
 
 span {
     color: #ddd;
+}
+
+#gameLevel {
+    margin-left: 0.3em;
 }
 
 /* @media (orientation: portrait) {

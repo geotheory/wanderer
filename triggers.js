@@ -25,6 +25,18 @@ var trigger_rules = {
             "balloon": ['-1,1', '-1,2', '0,1', '0,2', '1,1', '1,2'],
             "right arrow": ['1,0', '1,1', '2,0', '2,1'],
             "left arrow": ['-1,0', '-1,1', '-2,0', '-2,1']
+        },
+        "baby monster": {
+            "boulder": ['-1,-1', '-1,0', '1,-1', '1,0'],
+            "balloon": ['-1,1', '-1,2', '0,1', '0,2', '1,1', '1,2'],
+            "right arrow": ['1,0', '1,1', '2,0', '2,1', '0,1'],
+            "left arrow": ['-1,0', '-1,1', '-2,0', '-2,1', '0,1']
+        },
+        "big monster": {
+            "boulder": ['-1,-1', '-1,0', '1,-1', '1,0'],
+            "balloon": ['-1,1', '-1,2', '0,1', '0,2', '1,1', '1,2'],
+            "right arrow": ['1,0', '1,1', '2,0', '2,1', '0,1'],
+            "left arrow": ['-1,0', '-1,1', '-2,0', '-2,1', '0,1']
         }
     },
     "down": {
@@ -39,6 +51,18 @@ var trigger_rules = {
             "balloon": ['1,1', '1,-1'],
             "right arrow": ['1,0', '1,-1', '2,0', '2,-1'],
             "left arrow": ['-1,0', '-1,-1', '-2,0', '-2,-1']
+        },
+        "baby monster": {
+            "boulder": ['-1,-1', '-1,-2', '0,-1', '0,-2', '1,-1', '1,-2'],
+            "balloon": ['1,1', '1,-1'],
+            "right arrow": ['1,0', '1,-1', '2,0', '2,-1', '0,-1'],
+            "left arrow": ['-1,0', '-1,-1', '-2,0', '-2,-1', '0,-1']
+        },
+        "big monster": {
+            "boulder": ['-1,-1', '-1,-2', '0,-1', '0,-2', '1,-1', '1,-2'],
+            "balloon": ['1,1', '1,-1'],
+            "right arrow": ['1,0', '1,-1', '2,0', '2,-1', '0,-1'],
+            "left arrow": ['-1,0', '-1,-1', '-2,0', '-2,-1', '0,-1']
         }
     },
     "left": {
@@ -53,6 +77,18 @@ var trigger_rules = {
             "balloon": ['0,1', '0,2', '-1,1', '-1,2'],
             "left arrow": ['-1,-1', '-1,0', '-1,1', '-2,-1', '-2,0', '-2,1'],
             "right arrow": ['0,-1','1,-1', '0,1', '1,1']
+        },
+        "baby monster": {
+            "boulder": ['-1,0','0,-1', '0,-2', '-1,-1', '-1,-2'],
+            "balloon": ['0,1', '0,2', '-1,1', '-1,2'],
+            "left arrow": ['-1,-1', '-1,0', '-1,1', '-2,-1', '-2,0', '-2,1'],
+            "right arrow": ['0,-1', '1,-1', '0,1', '1,1']
+        },
+        "big monster": {
+            "boulder": ['-1,0','0,-1', '0,-2', '-1,-1', '-1,-2'],
+            "balloon": ['0,1', '0,2', '-1,1', '-1,2'],
+            "left arrow": ['-1,-1', '-1,0', '-1,1', '-2,-1', '-2,0', '-2,1'],
+            "right arrow": ['0,-1', '1,-1', '0,1', '1,1']
         }
     },
     "right": {
@@ -64,6 +100,18 @@ var trigger_rules = {
         },
         "right arrow": {
             "boulder": ['1,0','0,-1', '0,-2', '1,-1', '1,-2', '-2,-1'],
+            "balloon": ['0,1', '0,2', '1,1', '1,2'],
+            "right arrow": ['0,-1', '1,-1', '1,0', '1,1', '2,-1', '2,0', '2,1'],
+            "left arrow": ['0,-1', '-1,-1', '0,1', '-1,1']
+        },
+        "baby monster": {
+            "boulder": ['1,0','0,-1', '0,-2', '1,-1', '1,-2'],
+            "balloon": ['0,1', '0,2', '1,1', '1,2'],
+            "right arrow": ['0,-1', '1,-1', '1,0', '1,1', '2,-1', '2,0', '2,1'],
+            "left arrow": ['0,-1', '-1,-1', '0,1', '-1,1']
+        },
+        "big monster": {
+            "boulder": ['1,0','0,-1', '0,-2', '1,-1', '1,-2'],
             "balloon": ['0,1', '0,2', '1,1', '1,2'],
             "right arrow": ['0,-1', '1,-1', '1,0', '1,1', '2,-1', '2,0', '2,1'],
             "left arrow": ['0,-1', '-1,-1', '0,1', '-1,1']
@@ -82,6 +130,8 @@ var trigger_rules = {
 // function offset(x1, y1, x2, y2) { return String(x1 - x2) + ',' + String(y1 - y2); }
 
 function triggers(x1, y1, x2, y2, type = '') {
+    // if(x1 == 6 && y1 ==13) console.log(x1, y1, x2, y2, type);
+    // console.log(x1, y1, x2, y2, type);
     if(type === '') {
         var id = id_element(x2, y2);
         type = e[id].type;
@@ -93,14 +143,20 @@ function triggers(x1, y1, x2, y2, type = '') {
     
     // certain element types can trigger only when moving in certain directions
 
+    function get_dir(dx, dy){
+        var dir;
+        if(dx > 0) dir = 'right';
+        else if(dx < 0) dir = 'left';
+        else if(dy > 0) dir = 'up';
+        else dir = 'down';
+        return dir;
+    }
+
     switch(type){
 
         case 'player':     // can trigger in any direction
             if(Math.abs(dx) + Math.abs(dy) > 1) dir = 'teleport';
-            else if(dx > 0) dir = 'right';
-            else if(dx < 0) dir = 'left';
-            else if(dy > 0) dir = 'up';
-            else dir = 'down';
+            else dir = get_dir(dx, dy);
             break;
 
         case 'boulder':    // can trigger by downward motion
@@ -122,6 +178,10 @@ function triggers(x1, y1, x2, y2, type = '') {
             if(dy > 0) dir = 'up';
             else return;    // // see boulder assumption
             break;
+
+        case 'baby monster':// any direction
+            dir = get_dir(dx, dy);
+            break;
     }
 
     var neighbours = e.filter(i => i.x >= x1 - 2 && i.x <= x1 + 2 && i.y >= y1 - 2 && i.y <= y1 + 2)
@@ -139,6 +199,7 @@ function triggers(x1, y1, x2, y2, type = '') {
         var n = neighbours[i];
         var n_offset = String(x1 - n.x) + ',' + String(y1 - n.y);//  offset(x1, y1, n.x, n.y);
         var rule_set = trigger_rules[dir][type][n.type];
+        // console.log(type, dir, n.type);
         if(rule_set.indexOf(n_offset) > -1) {
             if(queue.indexOf(n.id) === -1) queue.push(n.id);
             if(verbose) console.log(`added ${n.id} to queue 2`);

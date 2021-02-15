@@ -1,5 +1,5 @@
 
-// Two functions approach() and move() and the rules for direct object interactions (not remote triggers)
+// Two functions approach and move and the rules for direct object interactions (not remote triggers)
 
 // Rules for interactions. Tree structured:
 //
@@ -10,9 +10,9 @@
 
 var rules = {
     "player": {
-        "top": { "boulder": "killed", "big monster": "killed" },
-        "side": { "boulder": "no", "right arrow": "killed", "left arrow": "killed", "big monster": "killed" },
-        "bottom": { "balloon": "no", "big monster": "killed" },
+        "top": { "boulder": "killed", "big monster": "killed", "baby monster": "killed" },
+        "side": { "boulder": "no", "right arrow": "killed", "left arrow": "killed", "big monster": "killed", "baby monster": "killed" },
+        "bottom": { "balloon": "no", "big monster": "killed", "baby monster": "killed" },
     },
     
     // edible (non-directional)
@@ -28,6 +28,7 @@ var rules = {
     "fire": { "any": { "player": "killed", "other": "no" } },
     "portal in": { "any": { "player": "teleport", "other": "no" } },
     "exit": { "any": { "player": "exit", "other": "no" } },
+    "cage": { "any": { "baby monster": "eat", "other": "no" } },
     
     // dynamic
     "left arrow": {
@@ -61,7 +62,19 @@ var rules = {
             "left arrow": "eat",
             "right arrow": "eat",
             "boulder": "eat",
-            "balloon": "no"
+            "balloon": "no",      // guess
+            "baby monster": "yes" // guess
+        }
+    },
+    "baby monster": {
+        "any": {
+            "player": "killed",
+            "left arrow": "yes",  // guess
+            "right arrow": "yes", // guess
+            "boulder": "yes",
+            "balloon": "yes",     // guess
+            "baby monster": "yes",
+            "big monster": "yes"  // guess
         }
     }
 }
@@ -69,13 +82,13 @@ var rules = {
 
 // manage the logic of any object moving from one grid cell to another
 
-function approach(x1, y1, x2, y2, approacher, deadly) {
-    
+function approach(x1, y1, x2, y2, approacher, deadly, approacher_id) {
+
     if(x2 < 1 || x2 > 40 || y2 < 1 || y2 > 16) return false;  // edge of canvas
     // if(verbose) console.log( `approach ${x1}, ${y1}, ${x2}, ${y2}, ${approacher}` );
 
     var occupant_id = id_element(x2, y2);
-    if(occupant_id === -1) return true;
+    if(occupant_id === -1) return true;  // cell is unoccupied
     
     var occupant_type = e[occupant_id].type;
     var top_branch = rules[occupant_type];
@@ -106,6 +119,9 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
 
         case 'no':
             return false;
+        
+        case 'yes':
+            return true;
 
         case 'eat':
             
@@ -118,7 +134,7 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
                     break;
 
                 case 'add moves':
-                    moves_remaining += 250;
+                    if(moves_remaining !== 99999) moves_remaining += 250;
                     break;
 
                 case 'dirt':
@@ -126,8 +142,13 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
                     break;
                 
                 case 'big monster':
-                    // points?
+                    console.log('big monster was killed');
                     break;
+
+                case 'cage':
+                    e[approacher_id].type = 'diamond'; // caged
+                    break;
+
             }
             kill_element(occupant_id);
             return true;
@@ -146,7 +167,6 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
 
         case 'killed':
             if(!deadly) return false; // elements must move 1 cell before becoming deadly
-            dead = true;
             e[playerID].sprite.setTexture('player-dead');
 
             switch(approacher){
@@ -167,25 +187,34 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
                     break;
 
                 case 'player':
-                    if(occupant_type == 'fire') {
-                        message('messenger', "You were killed by an exploding landmine!");
-                        if(sound) create_this.sound.play('sound-fire');
+
+                    switch(occupant_type){
+                        case 'fire':
+                            message('messenger', "You were killed by an exploding landmine!");
+                            if(sound) create_this.sound.play('sound-fire');
+                            break;
+                        case 'big monster':
+                            message('messenger', "You were killed by a hungry monster!");
+                            break;
+                        case 'baby monster':
+                            message('messenger', "You were killed by the little monsters!");
+                            break;
+                        default:
+                            message('messenger', "Unknown cause of death please investigate");
                     }
-                    else if(occupant_type == 'big monster') {
-                        message('messenger', "You were killed by a hungry monster!");
-                    }
-                    else message('messenger', "Unknown cause of death please investigate 1");
                     break;
                 
                 case 'big monster':
                     message('messenger', "You were killed by a hungry monster!");
                     break;
                 
-                case 'big monster':
-                    message('messenger', "You were killed by a baby monster");
+                case 'baby monster':
+                    message('messenger', "You were killed by the little monsters!");
                     break;
                 
             }
+            hold = true;
+            return false;
     
         case 'exit':
             if(diamonds_collected == diamonds_target) {
@@ -199,7 +228,7 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
             var x3 = x2 + dx;
             var y3 = y2 + dy;
             if(x3 < 1 || x3 > 40 || y3 < 1 || y3 > 16) return false;
-            push_cell = id_element(x3, y3);
+            push_cell = id_element(x3, y3);  // what if occupied by a baby monster (and nothing else)?
             if(push_cell >= 0) return false;
             e[occupant_id].x = x3;
             e[occupant_id].y = y3;
@@ -211,7 +240,6 @@ function approach(x1, y1, x2, y2, approacher, deadly) {
             return true;
          
         case 'deflect':
-            approacher_id = id_element(x1, y1);
 
             switch(approacher) {
 
@@ -309,9 +337,9 @@ function move(id, type = '', deadly = false) {
     var y1 = e[id].y;
     if(verbose) console.log( `    ${x1},${y1}` );
     
-    // check if it's possible to move to the target cell. For deflections approach()
+    // check if it's possible to move to the target cell. For deflections approach function
     // will report false and handle the movement itself
-    var target_accessible = approach(x1, y1, x1 + dx, y1 + dy, type, deadly);
+    var target_accessible = approach(x1, y1, x1 + dx, y1 + dy, type, deadly, id);
 
     if(target_accessible) {
         if(target_accessible === true) { // move to target
