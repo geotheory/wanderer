@@ -47,7 +47,6 @@ const { tidy, mutate, arrange, desc } = Tidy;
 // reads in data and builds the level. Accepts level number and option to purge existing level
 
 function load_level(level_number) {
-    console.log('loading level ', level_number);
     
     level_num = level_number;
     saveCookie('current_level', level_num);
@@ -252,7 +251,7 @@ function update () {
         }
     }
     else {
-        hold = false;
+        // hold = false;
         
         // monster moves
         if(monster_move) {
@@ -296,7 +295,6 @@ function update () {
     }
 
     if(dead) {
-        console.log('deaded');
         load_level(level_num);
         return;
     }
@@ -351,6 +349,7 @@ function update () {
                     dead = true;
                     e[playerID].sprite.setTexture('player-dead');
                     message('messenger', "You ran out of time!");
+                    hold = true;
                 }
 
                 // triggers

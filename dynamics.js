@@ -361,6 +361,7 @@ function move(id, type = '', deadly = false) {
         return true;  // so queue handler knows if a movement took place
     } else {
         busy = false;
+        hold = false;
         if(verbose) console.log( `end move ${id}` );
         return false
     }

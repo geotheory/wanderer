@@ -35,7 +35,7 @@ document.onkeyup = function(event) {
             reset_level();
             return;
 
-        case 13: // return/enter - stationary move
+        case 16: // return/enter - stationary move
             return_press = true;
             return;
         
@@ -123,13 +123,16 @@ region.bind(target, 'pan', function(e){
 function toggle_grid(){
     grid = !grid;
     if(grid){
+        var x1, x2;
         for(var i=1; i<=40; i++) {
-            var x = create_this.add.text(mapX(i)-10, mapY(1)-5, i, { "size": 5, color: 'yellow' });
-            grid_array.push(x);
+            x1 = create_this.add.text(mapX(i)-10, mapY(1)-5, i, { "size": 5, color: 'yellow' });
+            x2 = create_this.add.text(mapX(i)-10, mapY(16)-5, i, { "size": 5, color: 'yellow' });
+            grid_array.push(x1); grid_array.push(x2);
         }
         for(var i=1; i<=16; i++) {
-            var x = create_this.add.text(mapX(1)-10, mapY(i)-5, i, { color: 'yellow' });
-            grid_array.push(x);
+            x1 = create_this.add.text(mapX(1)-10, mapY(i)-5, i, { color: 'yellow' });
+            x2 = create_this.add.text(mapX(40)-10, mapY(i)-5, i, { color: 'yellow' });
+            grid_array.push(x1); grid_array.push(x2);
         }
     }
     else  {
@@ -137,4 +140,3 @@ function toggle_grid(){
         grid_array = [];
     }
 }
-
