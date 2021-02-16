@@ -173,17 +173,17 @@ function approach(x1, y1, x2, y2, approacher, deadly, approacher_id) {
 
                 case 'boulder':
                     message('messenger', "Killed by a falling boulder!");
-                    if(sound) create_this.sound.play('sound-boulder-killed');
+                    if(sound) create_this.sound.play('sound-killed');
                     break;
 
                 case 'left arrow':
                     message('messenger', 'Killed by a speeding arrow!');
-                    if(sound) create_this.sound.play('sound-arrow');
+                    if(sound) create_this.sound.play('sound-killed');
                     break;
                 
                 case 'right arrow':
                     message('messenger', 'Killed by a speeding arrow!');
-                    if(sound) create_this.sound.play('sound-arrow');
+                    if(sound) create_this.sound.play('sound-killed');
                     break;
 
                 case 'player':
@@ -191,13 +191,15 @@ function approach(x1, y1, x2, y2, approacher, deadly, approacher_id) {
                     switch(occupant_type){
                         case 'fire':
                             message('messenger', "You were killed by an exploding landmine!");
-                            if(sound) create_this.sound.play('sound-fire');
+                            if(sound) create_this.sound.play('sound-landmine');
                             break;
                         case 'big monster':
                             message('messenger', "You were killed by a hungry monster!");
+                            if(sound) create_this.sound.play('sound-killed');
                             break;
                         case 'baby monster':
                             message('messenger', "You were killed by the little monsters!");
+                            if(sound) create_this.sound.play('sound-killed');
                             break;
                         default:
                             message('messenger', "Unknown cause of death please investigate 1");
@@ -207,16 +209,19 @@ function approach(x1, y1, x2, y2, approacher, deadly, approacher_id) {
                 
                 case 'big monster':
                     message('messenger', "You were killed by a hungry monster!");
+                    if(sound) create_this.sound.play('sound-killed');
                     break;
                 
                 case 'baby monster':
                     message('messenger', "You were killed by the little monsters!");
+                    if(sound) create_this.sound.play('sound-killed');
                     break;
                 
                 default:
                     message('messenger', "Unknown cause of death please investigate 2");
                     break;
             }
+            
             kill = true;
             busy = true;
             return false;
@@ -225,7 +230,10 @@ function approach(x1, y1, x2, y2, approacher, deadly, approacher_id) {
             if(diamonds_collected == diamonds_target) {
                 message('messenger', 'Level complete!', 'next');
                 return true;
-            } else return false;
+            } else{
+                message('messenger', "Collect all the treasure 💎 first!", fun = 'exit blocked');
+                return false;
+            }
 
         case 'push':
             var dx = x2 - x1;
@@ -369,6 +377,7 @@ function move(id, type = '', deadly = false) {
         busy = false;
         hold_move = false;
         if(verbose) console.log( `end move ${id}` );
+        if(type == 'boulder' && deadly) if(sound) create_this.sound.play('boulder-stop');
         return false
     }
 }

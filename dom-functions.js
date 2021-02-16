@@ -21,8 +21,19 @@ function message(id, msg, fun = 'killed') {
     function enter(){
         document.addEventListener('keydown', function(event) {
             if (event.keyCode === 13) {
-                if(fun === 'killed') reset_level();
-                else next_level();
+
+                switch(fun){
+                    case 'killed':
+                        reset_level();
+                        break;
+                    case 'exit blocked':
+                        hold_dead = false;
+                        document.getElementById('messenger').style.display='none';
+                        break;
+                    default:
+                        next_level();
+                }
+
             } else enter();
         }, { once: true });
     }

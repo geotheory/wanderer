@@ -211,13 +211,13 @@ function preload () {
     this.load.svg('player-down', 'sprites/player-down.svg', { scale: 0.17 * scaler });
     this.load.svg('player-dead', 'sprites/player-dead.svg', { scale: 0.17 * scaler });
 
-    // this.load.audio('sound-teleport', 'sounds/teleport.wav');
-    // this.load.audio('sound-tick', 'sounds/tick.wav');
-    // this.load.audio('sound-diamond', 'sounds/diamond.wav');
-    // this.load.audio('sound-fire', 'sounds/fire.wav');
-    // this.load.audio('sound-boulder-killed', 'sounds/boulder.wav');
-    // this.load.audio('sound-boulder-fall', 'sounds/boulder-fall.wav');
-    // this.load.audio('sound-arrow', 'sounds/arrow.wav');
+    this.load.audio('sound-teleport', 'sounds/teleport.wav');
+    this.load.audio('sound-tick', 'sounds/tick.wav');
+    this.load.audio('sound-diamond', 'sounds/diamond.wav');
+    this.load.audio('sound-landmine', 'sounds/landmine.wav');
+    this.load.audio('sound-arrow', 'sounds/arrow.wav');
+    this.load.audio('sound-killed', 'sounds/killed.wav');
+    this.load.audio('boulder-stop', 'sounds/boulder.wav');
 }
 
 
@@ -236,7 +236,10 @@ function update () {
             var q = queue[i];
             queue = queue.filter((x,ind) => ![i].includes(ind)); // remove from queue
             var moved = move(q);
-            if(moved) break;
+            if(moved){
+                if(sound && ['left arrow','right arrow'].indexOf(e[q].type) > -1) create_this.sound.play('sound-arrow');
+                break;
+            }
         }
     }
     else {
@@ -291,6 +294,7 @@ function update () {
 
         if(cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown || return_press || swipeX || swipeY) {
 
+            if(sound) create_this.sound.play('sound-tick');
             if(return_press){
                 console.log();
                 return_press = false;
@@ -332,7 +336,7 @@ function update () {
             
             monster_move = true;
             input_sleeping = true;
-            var sleeptime = [150, 30][ (keydown > 0)+0 ];
+            var sleeptime = [150, 50][ (keydown > 0)+0 ];
             keydown++;
             sleep(sleeptime).then(() => { input_sleeping = false; });
 
