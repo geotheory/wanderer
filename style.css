@@ -9,7 +9,7 @@
     left: 0;
     right: 0;
     border: solid yellow 1px;
-    background-color: #666;
+    background-color: #606060;
     color:white;
     font-size: 1.2em;
     text-align-last: center;
@@ -18,12 +18,17 @@
 
 #refreshButton {
     float:right;
+    margin-top: 5px !important;
     cursor: pointer;
     background-color: rgb(255, 0, 255);
-    height: 28px !important;
+    height: 36px !important;
     line-height: 2rem;
     font-size: 0.7em;
     color:yellow;
+}
+
+#pagetitle {
+    margin-top: 10px;
 }
 
 body {
@@ -36,6 +41,13 @@ span {
 
 #gameLevel {
     margin-left: 0.3em;
+    margin-top: 4px;
+    margin-bottom: 2px;
+    color:white;
+}
+
+.level-choice {
+    font-size: 10px !important;
 }
 
 /* @media (orientation: portrait) {

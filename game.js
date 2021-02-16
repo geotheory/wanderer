@@ -11,7 +11,6 @@ var scaler = w / 800;
 function mapX (x) { return (x * cellW - cellW) + (10 * scaler); }
 function mapY (y) { return (h - (y * cellH)) + (13 * scaler); }
 
-
 var elements = {
     "@": "player", 
     " ": "space", 
@@ -61,7 +60,7 @@ function load_level(level_number) {
     lines = level.split('\n');
     level_title = lines[16];
     // document.getElementById('gameNote').textContent = level_title;
-    document.getElementById('gameLevel').textContent = 'Level: ' + level_number;
+    // document.getElementById('gameLevel').textContent = 'Level: ' + level_number;
     moves_remaining = Number(lines[17]);
     if(moves_remaining === 0) moves_remaining = 99999;  // 99999 denotes unlimited moves and will not count down
     document.getElementById('movesRemaining').textContent = "⏳ " + [moves_remaining, 'unlimited'][(moves_remaining === 99999)+0];
@@ -83,7 +82,7 @@ function load_level(level_number) {
     }
 
     baby_monsters = e.filter(i => i.type == 'baby monster').map(i => i.id); // ids
-    diamonds_target = e.filter(i => i.type == 'diamond').length + baby_monsters.length;
+    diamonds_target = e.filter(i => i.type == 'diamond').length + Math.min(baby_monsters.length, e.filter(i => i.type == 'cage').length);
     diamonds_collected = 0;
     document.getElementById('diamondsRemaining').textContent = "💎 " + (diamonds_target - diamonds_collected);
 
@@ -352,3 +351,4 @@ function update () {
 }
 
 var game = new Phaser.Game(config, 'game-area');
+

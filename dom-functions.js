@@ -1,4 +1,15 @@
 
+var menu_level = document.getElementById('gameLevel');
+var menu_level_html = '';
+for(var i=1; i<50; i++) menu_level_html += `<option class="level-choice" value="${i}">${i}</option>`;
+menu_level.innerHTML = menu_level_html;
+
+menu_level.onchange = function(){
+    level_num = Number(menu_level.value);
+    reset_level();
+}
+
+
 // interactivity and info messaging
 
 function message(id, msg, fun = 'killed') {
@@ -87,6 +98,7 @@ if(cookies.max_level === undefined) level_max = 1;
 else level_max = cookies.max_level;
 if(cookies.current_level === undefined) level_num = 1;
 else level_num = cookies.current_level;
+menu_level.value = String(level_num);
 
 // swipe for mobiles
 

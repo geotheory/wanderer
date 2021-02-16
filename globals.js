@@ -20,7 +20,7 @@ var cookies,             // retrieve any pre-existing cookie with detail of curr
     hold_move = false,   // hold player's movement until all element moves + triggers complete
     hold_dead = false,   // hold player's movement when killed
     dead = false,        // switch true to trigger load_level on next update
-    // kill = false;        // switch true to 
+    kill,                // switch true to 
     moves_remaining,     // running countdown
     diamonds_target,     // target = sum of diamonds and baby monsters
     diamonds_collected,  // running tally
