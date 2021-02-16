@@ -62,6 +62,7 @@ function reset_level() {
     dead = true;
     busy = false; // to pause monsters
     document.getElementById('messenger').style.display='none';
+    menu_level.value = String(level_num);
 }
 
 function next_level() {
