@@ -70,9 +70,10 @@ function load_level(level_number) {
     for(y=16; y>0; y--) {
         for(x=1; x<=40; x++) {
             var key = lines[16 - y].substr(x - 1, 1);
+            if( Object.keys(elements).indexOf(key) === -1 ) continue; // skip non-game letters (e.b. in "Booby Trap" in L14)
             var new_element = {'id': e.length, 'key': key, 'type': elements[key], 'x': x, 'y': y };
             if(typeof(elements[key]) === 'undefined') console.log('unknown element:', key);
-            if(elements[key] != 'space' && elements[key] != 'portal out') e.push(new_element);
+            if( [' ','-','A'].indexOf(key) === -1 ) e.push(new_element);
             if(elements[key] == 'portal out') portal_out = { "x": x, "y": y };
             if(new_element.type === 'big monster'){
                 big_monster = true;
