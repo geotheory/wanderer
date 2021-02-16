@@ -290,17 +290,6 @@ function update () {
     if( !input_sleeping && !hold_move && !hold_dead ) {
 
         if(cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown || return_press || swipeX || swipeY) {
-            
-            if(moves_remaining !== 99999){
-                moves_remaining--;
-                document.getElementById('movesRemaining').textContent = "⏳ " + moves_remaining;
-                if(moves_remaining <= 0) {
-                    dead = true;
-                    e[playerID].sprite.setTexture('player-dead');
-                    message('messenger', "You ran out of time!");
-                    // hold = true;
-                }
-            }
 
             if(return_press){
                 console.log();
@@ -346,6 +335,17 @@ function update () {
             var sleeptime = [150, 30][ (keydown > 0)+0 ];
             keydown++;
             sleep(sleeptime).then(() => { input_sleeping = false; });
+
+            if(moves_remaining !== 99999){
+                moves_remaining--;
+                document.getElementById('movesRemaining').textContent = "⏳ " + moves_remaining;
+                if(moves_remaining <= 0) {
+                    dead = true;
+                    e[playerID].sprite.setTexture('player-dead');
+                    message('messenger', "You ran out of time!");
+                    // hold = true;
+                }
+            }
         }
     }
 }
