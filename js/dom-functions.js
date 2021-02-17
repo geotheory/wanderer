@@ -121,7 +121,7 @@ var hammertime = new Hammer(target);
 
 hammertime.on('pan', function(ev) {
     g.x += ev.velocityX;
-    g.y += ev.velocityY;
+    g.y += ev.velocityY * 1.5;
     if(Math.abs(g.x) > 1 | Math.abs(g.y) > 1){  // adjust for touchscreen gesture sensitivity
         if(Math.abs(g.x) > Math.abs(g.y)) { swipeX = Math.sign(g.x); }
         else { swipeY = Math.sign(g.y); }
