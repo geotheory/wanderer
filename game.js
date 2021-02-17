@@ -67,14 +67,14 @@ function load_level(level_number) {
     portal_out = { "x": -1, "y": -1 }; // global
     monster = false;
 
+    // iterate rows and columns
     for(y=16; y>0; y--) {
         for(x=1; x<=40; x++) {
             var key = lines[16 - y].substr(x - 1, 1);
             if( Object.keys(elements).indexOf(key) === -1 ) continue; // skip non-game letters (e.b. in "Booby Trap" in L14)
-            var new_element = {'id': e.length, 'key': key, 'type': elements[key], 'x': x, 'y': y };
-            if(typeof(elements[key]) === 'undefined') console.log('unknown element:', key);
-            if( [' ','-','A'].indexOf(key) === -1 ) e.push(new_element);
-            if(elements[key] == 'portal out') portal_out = { "x": x, "y": y };
+            var new_element = {'id': e.length, 'key': key, 'type': elements[key], 'x': x, 'y': y }; // new element for array e[]
+            if( [' ','-','A'].indexOf(key) === -1 ) e.push(new_element); // omit spaces and portal out
+            if(elements[key] === 'portal out') portal_out = { "x": x, "y": y };
             if(new_element.type === 'big monster'){
                 big_monster = true;
                 monsterID = new_element.id;
@@ -82,11 +82,13 @@ function load_level(level_number) {
         }
     }
 
-    baby_monsters = e.filter(i => i.type == 'baby monster').map(i => i.id); // ids
+    // diamond target is sum of diamonds plus count of baby monster/cage pairs
+    baby_monsters = e.filter(i => i.type == 'baby monster').map(i => i.id); // baby monster ids
     diamonds_target = e.filter(i => i.type == 'diamond').length + Math.min(baby_monsters.length, e.filter(i => i.type == 'cage').length);
     diamonds_collected = 0;
     document.getElementById('diamondsRemaining').textContent = "💎 " + (diamonds_target - diamonds_collected);
 
+    // if there are baby monsters build a wall around the game area to remove need for extra logic to contain them
     if(baby_monsters.length > 0){
         var k = e.length;
         for( var x = 1; x <= 40; x++ ) {
@@ -101,39 +103,38 @@ function load_level(level_number) {
         }
     }
     
-    // this.add.image(400, 200, 'mist');
+    // walls are rectangles. all others are vector sprites
     var dark_wall_graphics = create_this.add.graphics({ fillStyle: { color: 0x777777 } });
     var light_wall_graphics = create_this.add.graphics({ fillStyle: { color: 0x888888 } });
     
     for(var i=0; i<e.length; i++) {
-        if(e[i].type == 'dark wall') {
-            e[i].sprite = new Phaser.Geom.Rectangle( e[i].x * cellW - cellW, h - (e[i].y * cellH), cellW, cellH, '#000', '#000' );
-            dark_wall_graphics.fillRectShape(e[i].sprite);
+
+        switch(e[i].type){
+
+            case 'dark wall':
+                e[i].sprite = new Phaser.Geom.Rectangle( e[i].x * cellW - cellW, h - (e[i].y * cellH), cellW, cellH, '#000', '#000' );
+                dark_wall_graphics.fillRectShape(e[i].sprite);
+                break;
+            
+            case 'light wall':
+                e[i].sprite = new Phaser.Geom.Rectangle( e[i].x * cellW - cellW, h - (e[i].y * cellH), cellW, cellH, '#000', '#000' );
+                light_wall_graphics.fillRectShape(e[i].sprite);
+                break;
+            
+            case 'player':
+                playerID = i;
+                break;
+            
+            default:
+                // all other elements have types with types matching sprite variables
+                e[i].sprite = create_this.add.image(mapX(e[i].x), mapY(e[i].y), e[i].type);
+                break;
         }
-        if(e[i].type == 'light wall') {
-            e[i].sprite = new Phaser.Geom.Rectangle( e[i].x * cellW - cellW, h - (e[i].y * cellH), cellW, cellH, '#000', '#000' );
-            light_wall_graphics.fillRectShape(e[i].sprite);
-        }
-        if(e[i].type == 'diamond') { e[i].sprite = create_this.add.image(mapX(e[i].x), mapY(e[i].y), 'diamond'); }
-        if(e[i].type == 'add moves') { e[i].sprite = create_this.add.image(mapX(e[i].x), mapY(e[i].y), 'add moves'); }
-        if(e[i].type == 'boulder') { e[i].sprite = create_this.add.image(mapX(e[i].x), mapY(e[i].y), 'boulder'); }
-        if(e[i].type == 'dirt') { e[i].sprite = create_this.add.image(mapX(e[i].x), mapY(e[i].y), 'dirt'); }
-        if(e[i].type == 'left slope') { e[i].sprite = create_this.add.image(mapX(e[i].x), mapY(e[i].y), 'left slope'); }
-        if(e[i].type == 'right slope') { e[i].sprite = create_this.add.image(mapX(e[i].x), mapY(e[i].y), 'right slope'); }
-        if(e[i].type == 'fire') { e[i].sprite = create_this.add.image(mapX(e[i].x), mapY(e[i].y), 'fire'); }
-        if(e[i].type == 'portal in') { e[i].sprite = create_this.add.image(mapX(e[i].x), mapY(e[i].y), 'portal in'); }
-        if(e[i].type == 'exit') { e[i].sprite = create_this.add.image(mapX(e[i].x), mapY(e[i].y), 'exit'); }
-        if(e[i].type == 'left arrow') { e[i].sprite = create_this.add.image(mapX(e[i].x), mapY(e[i].y), 'left arrow'); }
-        if(e[i].type == 'right arrow') { e[i].sprite = create_this.add.image(mapX(e[i].x), mapY(e[i].y), 'right arrow'); }
-        if(e[i].type == 'balloon') { e[i].sprite = create_this.add.image(mapX(e[i].x), mapY(e[i].y), 'balloon'); }
-        if(e[i].type == 'big monster') { e[i].sprite = create_this.add.image(mapX(e[i].x), mapY(e[i].y), 'big monster'); }
-        if(e[i].type == 'baby monster') { e[i].sprite = create_this.add.image(mapX(e[i].x), mapY(e[i].y), 'baby monster'); }
-        if(e[i].type == 'cage') { e[i].sprite = create_this.add.image(mapX(e[i].x), mapY(e[i].y), 'cage'); }
-        if(e[i].type == 'bomb') { e[i].sprite = create_this.add.image(mapX(e[i].x), mapY(e[i].y), 'bomb'); }
-        if(e[i].type == 'player') { playerID = i; }
     }
     // render player sprites last
     e[playerID].sprite = create_this.add.image(mapX(e[playerID].x), mapY(e[playerID].y), 'player');
+    
+    // initialise globals
     cursors = create_this.input.keyboard.createCursorKeys();
     queue = [];
     busy = false;
