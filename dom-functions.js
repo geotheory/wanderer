@@ -1,7 +1,7 @@
 
 var menu_level = document.getElementById('gameLevel');
 var menu_level_html = '';
-for(var i=1; i<50; i++) menu_level_html += `<option class="level-choice" value="${i}">${i}</option>`;
+for(var i=1; i<50; i++) menu_level_html += `<option class="level-option" value="${i}">Level ${i}</option>`;
 menu_level.innerHTML = menu_level_html;
 
 menu_level.onchange = function(){
@@ -131,17 +131,39 @@ var swipeX = 0,
 region.bind(target, 'pan', function(e){
     g.x += e.detail.data[0].change.x;
     g.y += e.detail.data[0].change.y;
-    if(Math.abs(g.x) > 5 | Math.abs(g.y) > 5){
+    if(Math.abs(g.x) > Number(level_num) | Math.abs(g.y) > Number(level_num)){ // level_num to testing sensitivity xxx
         if(Math.abs(g.x) > Math.abs(g.y)) { swipeX = Math.sign(g.x); }
         else { swipeY = Math.sign(g.y); }
-    }
-    // cancel after 30ms
-    sleep(60).then(() => {
         g = {"x": 0, "y": 0 }; 
-        swipeX = 0;
-        swipeY = 0;
-    });
+    }
 })
+
+// var z;
+// region.bind(target, 'tap', function(e){
+//     z = e;
+//     console.log(e.detail.interval);
+// })
+
+// ///----------------------------------------------
+
+// // var region = new ZingTouch.Region(target, true, false);
+
+// var longTap = new ZingTouch.Tap({
+//   maxDelay: 1000
+// })
+
+// region.bind(target, longTap, function(e){
+//   var textElement = document.getElementById('one');
+//   console.log('Tapped');
+  
+//   (function(element){
+//     setTimeout(function(){
+//       console.log('One Finger Tap');
+//     }, 1000);
+//   })(textElement);
+// })
+
+// ///----------------------------------------------
 
 
 function toggle_grid(){
