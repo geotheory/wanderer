@@ -207,8 +207,8 @@ function preload () {
     this.load.svg('left arrow', 'sprites/arrow-left.svg', { scale: 0.2 * scaler });
     this.load.svg('right arrow', 'sprites/arrow-right.svg', { scale: 0.2 * scaler });
     this.load.svg('balloon', 'sprites/balloon.svg', { scale: 0.4 * scaler });
-    this.load.svg('baby monster', 'sprites/monster-baby.svg', { scale: 0.25 * scaler });
-    this.load.svg('big monster', 'sprites/monster-big.svg', { scale: 0.2 * scaler });
+    this.load.svg('baby monster', 'sprites/monster-baby.svg', { scale: 0.17 * scaler });
+    this.load.svg('big monster', 'sprites/monster-big.svg', { scale: 0.17 * scaler });
     this.load.svg('cage', 'sprites/cage.svg', { scale: 0.2 * scaler });
     this.load.svg('bomb', 'sprites/bomb.svg', { scale: 0.4 * scaler });
     this.load.svg('player', 'sprites/player.svg', { scale: 0.17 * scaler });
