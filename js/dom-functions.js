@@ -117,11 +117,11 @@ menu_level.value = String(level_num);
 var swipeX = 0, swipeY = 0;
 var g = {"x": 0, "y": 0 }
 var target = document.getElementById('game-area');
-var hammertime = new Hammer(target);
+var hammertime = new Hammer(target, { velocity: 0.1, threshold: 0 });
 
 hammertime.on('pan', function(ev) {
     g.x += ev.velocityX;
-    g.y += ev.velocityY * 1.5;
+    g.y += ev.velocityY;
     if(Math.abs(g.x) > 1 | Math.abs(g.y) > 1){  // adjust for touchscreen gesture sensitivity
         if(Math.abs(g.x) > Math.abs(g.y)) { swipeX = Math.sign(g.x); }
         else { swipeY = Math.sign(g.y); }
