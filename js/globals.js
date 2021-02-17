@@ -10,7 +10,7 @@ var cookies,             // retrieve any pre-existing cookie with detail of curr
     queue,               // element triggers not actioned immediately are queued
     playerID,            // e[id].id of player sprite
     portal_out,          // {x,y} object of any teleport destination 
-    sound = true,       // sounds boolean
+    sound = false,       // sounds boolean
     verbose = false,     // more reporting to console.log
 
     // game flow variables
