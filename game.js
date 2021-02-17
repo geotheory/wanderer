@@ -6,6 +6,10 @@ var h = 1.25 * 16 * w / 40;
 var cellW = w / 40;
 var cellH = h / 16;
 var scaler = w / 800;
+var msg_yoffset = h - 250;
+console.log(msg_yoffset);
+var root = document.querySelector(':root');
+root.style.setProperty('--msgYoffset', msg_yoffset + 'px');
 
 // functions to map grid positions to canvas
 function mapX (x) { return (x * cellW - cellW) + (10 * scaler); }

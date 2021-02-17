@@ -10,7 +10,7 @@ var cookies,             // retrieve any pre-existing cookie with detail of curr
     queue,               // element triggers not actioned immediately are queued
     playerID,            // e[id].id of player sprite
     portal_out,          // {x,y} object of any teleport destination 
-    sound = false,       // sounds boolean
+    sound = true,       // sounds boolean
     verbose = false,     // more reporting to console.log
 
     // game flow variables
@@ -22,7 +22,7 @@ var cookies,             // retrieve any pre-existing cookie with detail of curr
     dead = false,        // switch true to trigger load_level on next update
     kill,                // switch true to 
     moves_remaining,     // running countdown
-    diamonds_target,     // target = sum of diamonds and baby monsters
+    diamonds_target,     // target = sum of diamonds and baby monster/cage pairs
     diamonds_collected,  // running tally
 
     // DOM variables

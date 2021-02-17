@@ -15,7 +15,7 @@ menu_level.onchange = function(){
 function message(id, msg, fun = 'killed') {
     hold_dead = true;
     var x = document.getElementById(id);
-    var new_html = `<h4>${msg}</h4><h5>press return..</h5>`;
+    var new_html = `<h4>${msg}</h4><h5>tap or press return..</h5>`;
     x.innerHTML = new_html;
     x.style.display = "block";
     function enter(){
@@ -131,7 +131,7 @@ var swipeX = 0,
 region.bind(target, 'pan', function(e){
     g.x += e.detail.data[0].change.x;
     g.y += e.detail.data[0].change.y;
-    if(Math.abs(g.x) > Number(level_num) | Math.abs(g.y) > Number(level_num)){ // level_num to testing sensitivity xxx
+    if(Math.abs(g.x) > 20 | Math.abs(g.y) > 20){  // adjust for touchscreen gesture sensitivity
         if(Math.abs(g.x) > Math.abs(g.y)) { swipeX = Math.sign(g.x); }
         else { swipeY = Math.sign(g.y); }
         g = {"x": 0, "y": 0 }; 

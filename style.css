@@ -1,11 +1,16 @@
 
-.alert {
+
+:root {
+    --msgYoffset: 400px;
+  }
+  
+  .alert {
     margin: auto;
     position: absolute;
     display: none;
-    padding: 5px 5px 5px 5px !important;
+    padding: 25px 5px 25px 5px !important;
     width: 500px;
-    top: 300px;
+    top: var(--msgYoffset);
     left: 0;
     right: 0;
     border: solid yellow 1px;
@@ -14,18 +19,6 @@
     font-size: 1.2em;
     text-align-last: center;
     z-index: 100;
-}
-
-#refreshButton {
-    float:right;
-    margin: 0px !important;
-    cursor: pointer;
-    background-color: rgb(255, 0, 255);
-    height: 46px !important;
-    line-height: 2rem;
-    font-size: 0.7em;
-    color:#fff;
-    font-size:0.9em;
 }
 
 #pagetitle {
