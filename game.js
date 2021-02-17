@@ -49,6 +49,7 @@ function load_level(level_number) {
     
     level_num = level_number;
     saveCookie('current_level', level_num);
+    big_monster = false;
 
     // remove all elements and sprites
     if(create_this.children.list.length > 0) create_this.children.list = [];
