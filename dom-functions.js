@@ -114,14 +114,6 @@ menu_level.value = String(level_num);
 
 // swipe for mobiles
 
-// var containerElement = document.getElementById('game-area');
-// var activeRegion = ZingTouch.Region(containerElement);
-
-// var childElement = document.getElementById('game-area');
-// activeRegion.bind(childElement, 'pan', function(event){
-// 	//Perform Operations
-// });
-
 var swipeX = 0, 
     swipeY = 0,
     g = {"x": 0, "y": 0 },
@@ -180,6 +172,12 @@ function toggle_grid(){
             x2 = create_this.add.text(mapX(40)-10, mapY(i)-5, i, { color: 'yellow' });
             grid_array.push(x1); grid_array.push(x2);
         }
+        var game_dims = String(document.getElementById('game-panel').offsetWidth) + ' x ' +
+                        String(document.getElementById('game-panel').offsetHeight);
+        var screen_dims = String(window.innerWidth) + ' x ' + String(window.innerHeight);
+        x1 = create_this.add.text(mapX(20), mapY(10), game_dims, { color: 'yellow' });
+        x2 = create_this.add.text(mapX(20), mapY(8), screen_dims, { color: 'yellow' });
+        grid_array.push(x1); grid_array.push(x2);
     }
     else  {
         grid_array.map( x => x.destroy() );

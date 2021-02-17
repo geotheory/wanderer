@@ -336,6 +336,8 @@ function update () {
                 e[playerID].y = y2;
                 e[playerID].sprite.x = mapX(e[playerID].x);
                 e[playerID].sprite.y = mapY(e[playerID].y);
+
+                if(x2 === 25 && y2  === 11) toggle_grid(); // test
                 
                 // triggers
                 triggers(x1, y1, x2, y2, 'player');
