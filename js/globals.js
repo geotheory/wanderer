@@ -14,7 +14,7 @@ var cookies,             // retrieve any pre-existing cookie with detail of curr
     verbose = false,     // more reporting to console.log
 
     // game flow variables
-    speed = 30,          // delay of moving objects (lower = faster)
+    speed = 15,          // delay of moving objects (lower = faster)
     input_sleeping,      // boolean for user input delay
     busy = false,        // pause everything while any element is moving
     hold_move = false,   // hold player's movement until all element moves + triggers complete
