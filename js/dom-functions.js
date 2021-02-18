@@ -12,12 +12,24 @@ menu_level.onchange = function(){
 
 // interactivity and info messaging
 
+function msg_fun(){ return; }
+
 function message(id, msg, fun = 'killed') {
     hold_dead = true;
     var x = document.getElementById(id);
     var new_html = `<h4>${msg}</h4><h5>tap or press return..</h5>`;
     x.innerHTML = new_html;
     x.style.display = "block";
+    
+    if (fun === 'killed') msg_fun = reset_level;
+    else if (fun === 'exit blocked'){
+        msg_fun = function(){
+            hold_dead = false;
+            document.getElementById('messenger').style.display='none';
+        }
+    }
+    else msg_fun = next_level;
+    
     function enter(){
         document.addEventListener('keydown', function(event) {
             if (event.keyCode === 13) {
@@ -33,12 +45,17 @@ function message(id, msg, fun = 'killed') {
                     default:
                         next_level();
                 }
-
             } else enter();
         }, { once: true });
     }
     enter();
 }
+
+
+onclick="reset_level()"
+
+
+
 
 document.onkeyup = function(event) {
 
@@ -120,8 +137,9 @@ var target = document.getElementById('game-area');
 var hammertime = new Hammer(target, { velocity: 0.1, threshold: 0 });
 
 hammertime.on('pan', function(ev) {
+    console.log( Math.round(ev.velocityX*100)/100, Math.round(ev.velocityY*100)/100 );
     g.x += ev.velocityX;
-    g.y += ev.velocityY  * 2;
+    g.y += ev.velocityY;
     if(Math.abs(g.x) > 1 | Math.abs(g.y) > 1){  // adjust for touchscreen gesture sensitivity
         if(Math.abs(g.x) > Math.abs(g.y)) { swipeX = Math.sign(g.x); }
         else { swipeY = Math.sign(g.y); }
