@@ -28,6 +28,7 @@ var cookies,             // retrieve any pre-existing cookie with detail of curr
     // DOM variables
     cursors,             // variable for cursor keys
     return_press = false,// for stationary moves
+    tap = false,         // for stationary moves
     keydown = 0,         // keypress timer
     grid = false,        // show/hide grid
     grid_array = [],     // grid array

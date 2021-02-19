@@ -167,6 +167,20 @@ function kill_element(id) {
     e[id].x = -1;               // prevent id_element() identifying them
 }
 
+function count_move() {
+    if(moves_remaining !== 99999){
+        moves_remaining--;
+        document.getElementById('movesRemaining').textContent = "⏳ " + moves_remaining;
+        if(moves_remaining <= 0) {
+            dead = true;
+            e[playerID].sprite.setTexture('player-dead');
+            kill = true;
+            busy = true;
+            message('messenger', "You ran out of time!");
+        }
+    }
+}
+
 //-----------------------------------------------------------------------------------
 
 // PHASER
@@ -299,13 +313,15 @@ function update () {
 
     if( !input_sleeping && !hold_move && !hold_dead ) {
 
-        if(cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown || return_press || swipeX || swipeY) {
+        if(cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown || return_press || tap || swipeX || swipeY ) {
 
             if(sound) create_this.sound.play('sound-tick');
-            if(return_press){
+            if(return_press || tap){
                 console.log();
                 return_press = false;
+                tap = false;
                 monster_move = true;
+                count_move();
                 return;
             }
 
@@ -349,16 +365,7 @@ function update () {
             keydown++;
             sleep(sleeptime).then(() => { input_sleeping = false; });
 
-            if(moves_remaining !== 99999){
-                moves_remaining--;
-                document.getElementById('movesRemaining').textContent = "⏳ " + moves_remaining;
-                if(moves_remaining <= 0) {
-                    dead = true;
-                    e[playerID].sprite.setTexture('player-dead');
-                    message('messenger', "You ran out of time!");
-                    // hold = true;
-                }
-            }
+            count_move();
         }
     }
 }

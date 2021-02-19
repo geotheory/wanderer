@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="//cdn.jsdelivr.net/npm/phaser@3.52.0/dist/phaser.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/phaser@3.52.0/dist/phaser-arcade-physics.min.js"></script> -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js'></script>
+</head>
+<body>
+<div id="game-area"></div>
+<script>
+
+var config = {
+    parent: 'game-area', type: Phaser.AUTO, width: 800, height: 600,
+    backgroundColor: '#aaa', scene: { create: create, update: update }
+}
+
+var player;
+
+function create () {
+    var light_wall_graphics = this.add.graphics({ fillStyle: { color: 0xffff00 } });
+    player = new Phaser.Geom.Rectangle( 400, 300, 50, 50 );
+    player = light_wall_graphics.fillRectShape(player);
+}
+
+function update () {
+
+    if ( Math.abs(g.x) > 1 ) {
+        player.x += Math.sign(g.x) * 10;
+        g = {"x": 0, "y": 0 };  // reset
+    }
+
+    if ( Math.abs(g.y) > 1 ) {
+        player.y += Math.sign(g.y) * 10;
+        g = {"x": 0, "y": 0 };
+    }
+}
+
+var game = new Phaser.Game(config, 'game-area');
+
+// hammer listener
+var g = {"x": 0, "y": 0 }
+var target = document.getElementById('game-area');
+var hammertime = new Hammer(target, { velocity: 0.1, threshold: 0 });
+hammertime.on('pan', function(ev) { g.x += ev.velocityX; g.y += ev.velocityY; });
+
+</script>
+</body>
+</html>

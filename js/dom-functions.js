@@ -16,19 +16,46 @@ function msg_fun(){ return; }
 
 function message(id, msg, fun = 'killed') {
     hold_dead = true;
-    var x = document.getElementById(id);
+    var dialogue = document.getElementById(id);
     var new_html = `<h4>${msg}</h4><h5>tap or press return..</h5>`;
-    x.innerHTML = new_html;
-    x.style.display = "block";
+    dialogue.innerHTML = new_html;
+    dialogue.style.display = "block";
     
-    if (fun === 'killed') msg_fun = reset_level;
-    else if (fun === 'exit blocked'){
-        msg_fun = function(){
-            hold_dead = false;
-            document.getElementById('messenger').style.display='none';
-        }
+    // if (fun === 'killed') msg_fun = reset_level;
+    // else if (fun === 'exit blocked'){
+    //     msg_fun = function(){
+    //         hold_dead = false;
+    //         document.getElementById('messenger').style.display='none';
+    //     }
+    // }
+    // else msg_fun = next_level;
+
+    switch(fun){
+        // reassign msg_fun() - called when the dialogue closes - to appropriate action
+
+        case 'killed':
+            msg_fun = reset_level;
+            break;
+
+        case 'exit blocked':
+            msg_fun = function(){
+                hold_dead = false;
+                document.getElementById('messenger').style.display='none';
+            };
+            break;
+
+        case 'long press':
+            console.log('long press');
+            break;
+
+        case 'next':
+            msg_fun = next_level;
+            break;
+
+        default:
+            console.log('message() called but case unknown');
+            break;
     }
-    else msg_fun = next_level;
     
     function enter(){
         document.addEventListener('keydown', function(event) {
@@ -42,8 +69,13 @@ function message(id, msg, fun = 'killed') {
                         hold_dead = false;
                         document.getElementById('messenger').style.display='none';
                         break;
-                    default:
+                    case 'long press':
+                        reset_level();
+                        break;
+                    case 'next':
                         next_level();
+                    default:
+                        console.log('enter pressed but case unknown');
                 }
             } else enter();
         }, { once: true });
@@ -150,33 +182,35 @@ hammertime.on('pan', function(ev) {
 hammertime.add( new Hammer.Press({ time: 750 }) );
 
 hammertime.on('press', function(e) {
-    console.log('long press');
+    msg_fun = reset_level;
+    message('messenger', 'Reload level?', 'long press');
 });
 
+hammertime.on('tap', function(e) { tap = true; });
 
-function toggle_grid(){
-    grid = !grid;
-    if(grid){
-        var x1, x2;
-        for(var i=1; i<=40; i++) {
-            x1 = create_this.add.text(mapX(i)-10, mapY(1)-5, i, { "size": 5, color: 'yellow' });
-            x2 = create_this.add.text(mapX(i)-10, mapY(16)-5, i, { "size": 5, color: 'yellow' });
-            grid_array.push(x1); grid_array.push(x2);
-        }
-        for(var i=1; i<=16; i++) {
-            x1 = create_this.add.text(mapX(1)-10, mapY(i)-5, i, { color: 'yellow' });
-            x2 = create_this.add.text(mapX(40)-10, mapY(i)-5, i, { color: 'yellow' });
-            grid_array.push(x1); grid_array.push(x2);
-        }
-        var game_dims = String(document.getElementById('game-panel').offsetWidth) + ' x ' +
-                        String(document.getElementById('game-panel').offsetHeight);
-        var screen_dims = String(window.innerWidth) + ' x ' + String(window.innerHeight);
-        x1 = create_this.add.text(mapX(20), mapY(10), game_dims, { color: 'yellow' });
-        x2 = create_this.add.text(mapX(20), mapY(8), screen_dims, { color: 'yellow' });
-        grid_array.push(x1); grid_array.push(x2);
-    }
-    else  {
-        grid_array.map( x => x.destroy() );
-        grid_array = [];
-    }
-}
+function toggle_grid(){}
+//     grid = !grid;
+//     if(grid){
+//         var x1, x2;
+//         for(var i=1; i<=40; i++) {
+//             x1 = create_this.add.text(mapX(i)-10, mapY(1)-5, i, { "size": 5, color: 'yellow' });
+//             x2 = create_this.add.text(mapX(i)-10, mapY(16)-5, i, { "size": 5, color: 'yellow' });
+//             grid_array.push(x1); grid_array.push(x2);
+//         }
+//         for(var i=1; i<=16; i++) {
+//             x1 = create_this.add.text(mapX(1)-10, mapY(i)-5, i, { color: 'yellow' });
+//             x2 = create_this.add.text(mapX(40)-10, mapY(i)-5, i, { color: 'yellow' });
+//             grid_array.push(x1); grid_array.push(x2);
+//         }
+//         var game_dims = String(document.getElementById('game-panel').offsetWidth) + ' x ' +
+//                         String(document.getElementById('game-panel').offsetHeight);
+//         var screen_dims = String(window.innerWidth) + ' x ' + String(window.innerHeight);
+//         x1 = create_this.add.text(mapX(20), mapY(10), game_dims, { color: 'yellow' });
+//         x2 = create_this.add.text(mapX(20), mapY(8), screen_dims, { color: 'yellow' });
+//         grid_array.push(x1); grid_array.push(x2);
+//     }
+//     else  {
+//         grid_array.map( x => x.destroy() );
+//         grid_array = [];
+//     }
+// }
