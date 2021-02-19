@@ -188,29 +188,29 @@ hammertime.on('press', function(e) {
 
 hammertime.on('tap', function(e) { tap = true; });
 
-function toggle_grid(){}
-//     grid = !grid;
-//     if(grid){
-//         var x1, x2;
-//         for(var i=1; i<=40; i++) {
-//             x1 = create_this.add.text(mapX(i)-10, mapY(1)-5, i, { "size": 5, color: 'yellow' });
-//             x2 = create_this.add.text(mapX(i)-10, mapY(16)-5, i, { "size": 5, color: 'yellow' });
-//             grid_array.push(x1); grid_array.push(x2);
-//         }
-//         for(var i=1; i<=16; i++) {
-//             x1 = create_this.add.text(mapX(1)-10, mapY(i)-5, i, { color: 'yellow' });
-//             x2 = create_this.add.text(mapX(40)-10, mapY(i)-5, i, { color: 'yellow' });
-//             grid_array.push(x1); grid_array.push(x2);
-//         }
-//         var game_dims = String(document.getElementById('game-panel').offsetWidth) + ' x ' +
-//                         String(document.getElementById('game-panel').offsetHeight);
-//         var screen_dims = String(window.innerWidth) + ' x ' + String(window.innerHeight);
-//         x1 = create_this.add.text(mapX(20), mapY(10), game_dims, { color: 'yellow' });
-//         x2 = create_this.add.text(mapX(20), mapY(8), screen_dims, { color: 'yellow' });
-//         grid_array.push(x1); grid_array.push(x2);
-//     }
-//     else  {
-//         grid_array.map( x => x.destroy() );
-//         grid_array = [];
-//     }
-// }
+function toggle_grid(){//}
+    grid = !grid;
+    if(grid){
+        var x1, x2;
+        for(var i=1; i<=40; i++) {
+            x1 = create_this.add.text(mapX(i)-10, mapY(1)-5, i, { "size": 5, color: 'yellow' });
+            x2 = create_this.add.text(mapX(i)-10, mapY(16)-5, i, { "size": 5, color: 'yellow' });
+            grid_array.push(x1); grid_array.push(x2);
+        }
+        for(var i=1; i<=16; i++) {
+            x1 = create_this.add.text(mapX(1)-10, mapY(i)-5, i, { color: 'yellow' });
+            x2 = create_this.add.text(mapX(40)-10, mapY(i)-5, i, { color: 'yellow' });
+            grid_array.push(x1); grid_array.push(x2);
+        }
+        var game_dims = String(document.getElementById('game-panel').offsetWidth) + ' x ' +
+                        String(document.getElementById('game-panel').offsetHeight);
+        var screen_dims = String(window.innerWidth) + ' x ' + String(window.innerHeight);
+        x1 = create_this.add.text(mapX(20), mapY(10), game_dims, { color: 'yellow' });
+        x2 = create_this.add.text(mapX(20), mapY(8), screen_dims, { color: 'yellow' });
+        grid_array.push(x1); grid_array.push(x2);
+    }
+    else  {
+        grid_array.map( x => x.destroy() );
+        grid_array = [];
+    }
+}

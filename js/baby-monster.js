@@ -17,11 +17,12 @@ function check_wall(x, y, w) {
 
 function baby_monster_move(id) {
     // move baby monster with given id
-    
+
     var m = e[id],
         priorities;
     
     if(m.last_dir === undefined) baby_monster_initialise(id);
+    if(m.last_dir === undefined) return; // initialisation failed
 
     switch(m.last_dir){
         case "0,1":  // UP
@@ -91,7 +92,7 @@ function baby_monster_initialise(id) {
     if(objects.length > 0) {
         var anchor_id = environ.indexOf(objects[0]);
         e[id].last_dir = vectors[anchor_id];
-    }
+    } else e[id].last_dir = '0,-1'; // to review (e.g. L46)
     return;
 }
 
