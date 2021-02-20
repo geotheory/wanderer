@@ -209,12 +209,12 @@ function approach(x1, y1, x2, y2, approacher, deadly, approacher_id) {
                 
                 case 'big monster':
                     message('messenger', "You were killed by a hungry monster!");
-                    if(sound) create_this.sound.play('sound-killed');
+                    if(sound) create_this.sound.play('sound-monsters');
                     break;
                 
                 case 'baby monster':
                     message('messenger', "You were killed by the little monsters!");
-                    if(sound) create_this.sound.play('sound-killed');
+                    if(sound) create_this.sound.play('sound-monsters');
                     break;
                 
                 default:
@@ -377,7 +377,7 @@ function move(id, type = '', deadly = false) {
         busy = false;
         hold_move = false;
         if(verbose) console.log( `end move ${id}` );
-        if(type == 'boulder' && deadly) if(sound) create_this.sound.play('boulder-stop');
+        if(type == 'boulder' && deadly) if(sound) create_this.sound.play('sound-boulder');
         return false
     }
 }
