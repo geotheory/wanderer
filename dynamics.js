@@ -138,7 +138,7 @@ function approach(x1, y1, x2, y2, approacher, deadly, approacher_id) {
                     break;
 
                 case 'dirt':
-                    if(sound) create_this.sound.play('sound-tick');
+                    if(sound) create_this.sound.play('sound-dirt');
                     break;
                 
                 case 'big monster':

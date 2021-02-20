@@ -239,6 +239,7 @@ function preload () {
     this.load.audio('sound-arrow', 'sounds/arrow.wav');
     this.load.audio('sound-killed', 'sounds/killed.wav');
     this.load.audio('boulder-stop', 'sounds/boulder.wav');
+    this.load.audio('sound-dirt', 'sounds/dirt.wav');
 }
 
 
@@ -353,7 +354,7 @@ function update () {
                 e[playerID].sprite.x = mapX(e[playerID].x);
                 e[playerID].sprite.y = mapY(e[playerID].y);
 
-                if(x2 === 25 && y2  === 11) toggle_grid(); // dims test
+                // if(x2 === 25 && y2  === 11) toggle_grid(); // dims test
                 
                 // triggers
                 triggers(x1, y1, x2, y2, 'player');

@@ -216,3 +216,9 @@ function toggle_grid(){//}
         grid_array = [];
     }
 }
+
+function toggle_sound(){
+    sound = !sound;
+    if(sound) document.getElementById('sound').innerText = '🔊';
+    else document.getElementById('sound').innerText = '🔇';
+}
