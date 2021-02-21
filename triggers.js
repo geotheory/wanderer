@@ -187,7 +187,7 @@ function triggers(x1, y1, x2, y2, type = '') {
 
     var neighbours = e.filter(i => i.x >= x1 - 2 && i.x <= x1 + 2 && i.y >= y1 - 2 && i.y <= y1 + 2)
                       .filter(i => ['boulder','right arrow','left arrow','balloon'].indexOf(i.type) > -1);
-                      
+
     // order of neighbours is unknown. But apparently:
     //   - opposing arrows trigger left arrow first
     //   - boulders on the left trigger first
