@@ -168,16 +168,58 @@ var g = {"x": 0, "y": 0 }
 var target = document.getElementById('game-area');
 var hammertime = new Hammer(target, { velocity: 0.1, threshold: 0 });
 
-hammertime.on('pan', function(ev) {
-    console.log( Math.round(ev.velocityX*100)/100, Math.round(ev.velocityY*100)/100 );
-    g.x += ev.velocityX;
-    g.y += ev.velocityY;
-    if(Math.abs(g.x) > 1 | Math.abs(g.y) > 1){  // adjust for touchscreen gesture sensitivity
+// hammertime.on('pan', function(ev) {
+//     console.log( Math.round(ev.velocityX*100)/100, Math.round(ev.velocityY*100)/100 );
+//     g.x += ev.velocityX;
+//     g.y += ev.velocityY;
+//     if(Math.abs(g.x) > 1 | Math.abs(g.y) > 1){  // adjust for touchscreen gesture sensitivity
+//         if(Math.abs(g.x) > Math.abs(g.y)) { swipeX = Math.sign(g.x); }
+//         else { swipeY = Math.sign(g.y); }
+//         g = {"x": 0, "y": 0 }; 
+//     }
+// });
+
+
+// -----------------------------------------------------------------------------------
+
+// control globals
+
+var p = { x: 0, y: 0 },  // pointer position
+    g = { x: 0, y: 0 },  // gesture - delta position
+    mouse_down = false,
+    target = document.getElementById('game-area'),
+    mouse_report = document.getElementById('mouse-report'),
+    touch_report = document.getElementById('touch-report'),
+    sensitivity = 5;  // lower value = higher sensitivity
+
+document.body.addEventListener('mousedown',function(e){ mouse_down = true;});
+document.body.addEventListener('mouseup',function(e){ mouse_down = false;});
+
+function gesture(x, y){
+    g.x += x - p.x;
+    g.y += y - p.y;
+    p.x = x;
+    p.y = y;
+    if(Math.abs(g.x) > sensitivity | Math.abs(g.y) > sensitivity){
         if(Math.abs(g.x) > Math.abs(g.y)) { swipeX = Math.sign(g.x); }
         else { swipeY = Math.sign(g.y); }
         g = {"x": 0, "y": 0 }; 
     }
-});
+}
+
+document.body.addEventListener('mousemove',function(e){
+    if(mouse_down){ gesture(e.x, e.y); }
+})
+
+document.body.addEventListener('touchmove',function(e){
+    var touch = e.touches[0];
+    gesture(touch.pageX, touch.pageY);
+})
+
+
+
+// -----------------------------------------------------------------------------------
+
 
 hammertime.add( new Hammer.Press({ time: 750 }) );
 
