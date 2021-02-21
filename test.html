@@ -60,8 +60,8 @@ document.body.addEventListener('mousemove',function(e){
     if(mouse_down){
         d.x += e.x - p.x;
         d.y += e.y - p.y;
-        // mouse_report.innerText = d.x + ' ' + d.y;
-        mouse_report.innerText = stringifyEvent(e);
+        mouse_report.innerText = d.x + ' ' + d.y;
+        // mouse_report.innerText = stringifyEvent(e);
         p.x = e.x;
         p.y = e.y;
     }
@@ -69,14 +69,11 @@ document.body.addEventListener('mousemove',function(e){
 
 document.body.addEventListener('touchmove',function(e){
     var touch = e.touches[0];
-    mouseX = touch.pageX;
-    mouseY = touch.pageY;
-    // touch_report.innerText = stringifyEvent(e);
-    // et = e;
-    // var touch = e.touches[0];
-    // mouseX = touch.pageX;
-    // mouseY = touch.pageY;
-    touch_report.innerText = mouseX + ' ' + mouseY;
+    d.x += touch.pageX - p.x;
+    d.y += touch.pageY - p.y;
+    mouse_report.innerText = d.x + ' ' + d.y;
+    p.x = touch.pageX;
+    p.y = touch.pageY;
 })
 
 
