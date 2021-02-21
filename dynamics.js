@@ -229,6 +229,10 @@ function approach(x1, y1, x2, y2, approacher, deadly, approacher_id) {
         case 'exit':
             if(diamonds_collected == diamonds_target) {
                 message('messenger', 'Level complete!', 'next');
+                if(sound){
+                    create_this.sound.play('sound-exit1');
+                    create_this.sound.play('sound-exit2');
+                }
                 return true;
             } else{
                 message('messenger', "Collect all the treasure 💎 first!", fun = 'exit blocked');

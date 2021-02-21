@@ -38,3 +38,13 @@ var cookies,             // retrieve any pre-existing cookie with detail of curr
     monsterID,           // e[id].id of of big monster sprite
     monster_move,        // boolean for controlling when monsters move
     baby_monsters;       // array of baby monster ids
+
+var dists = {
+    "-2,-2": 2.8, "-1,-2": 2.2, "0,-2": 2, "1,-2": 2.2, "2,-2": 2.8, 
+    "-2,-1": 2.2, "-1,-1": 1.4, "0,-1": 1, "1,-1": 1.4, "2,-1": 2.2, 
+    "-2,0": 2, "-1,0": 1, "0,0": 0, "1,0": 1, "2,0": 2, 
+    "-2,1": 2.2, "-1,1": 1.4, "0,1": 1, "1,1": 1.4, "2,1": 2.2, 
+    "-2,2": 2.8, "-1,2": 2.2, "0,2": 2, "1,2": 2.2, "2,2": 2.8
+};
+
+var type_order = { "boulder": 1, "left arrow": 2, "right arrow": 3 ,'balloon': 4 };

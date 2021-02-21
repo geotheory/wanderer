@@ -222,3 +222,4 @@ function toggle_sound(){
     if(sound) document.getElementById('sound').innerText = '🔊';
     else document.getElementById('sound').innerText = '🔇';
 }
+

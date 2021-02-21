@@ -232,17 +232,8 @@ function preload () {
     this.load.svg('player-down', 'sprites/player-down.svg', { scale: 0.17 * scaler });
     this.load.svg('player-dead', 'sprites/player-dead.svg', { scale: 0.17 * scaler });
 
-    var sounds = ['teleport','tick','diamond','landmine','arrow','killed','boulder','dirt','monsters'];
+    var sounds = ['teleport','tick','diamond','landmine','arrow','killed','boulder','dirt','monsters','exit1','exit2'];
     sounds.map(s => this.load.audio(`sound-${s}`, `sounds/${s}.wav`));
-    // this.load.audio('sound-teleport', 'sounds/teleport.wav');
-    // this.load.audio('sound-tick', 'sounds/tick.wav');
-    // this.load.audio('sound-diamond', 'sounds/diamond.wav');
-    // this.load.audio('sound-landmine', 'sounds/landmine.wav');
-    // this.load.audio('sound-arrow', 'sounds/arrow.wav');
-    // this.load.audio('sound-killed', 'sounds/killed.wav');
-    // this.load.audio('sound-boulder', 'sounds/boulder.wav');
-    // this.load.audio('sound-dirt', 'sounds/dirt.wav');
-    // this.load.audio('sound-monsters', 'sounds/monsters.wav');
 }
 
 

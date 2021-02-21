@@ -187,6 +187,7 @@ function triggers(x1, y1, x2, y2, type = '') {
 
     var neighbours = e.filter(i => i.x >= x1 - 2 && i.x <= x1 + 2 && i.y >= y1 - 2 && i.y <= y1 + 2)
                       .filter(i => ['boulder','right arrow','left arrow','balloon'].indexOf(i.type) > -1);
+                      
     // order of neighbours is unknown. But apparently:
     //   - opposing arrows trigger left arrow first
     //   - boulders on the left trigger first
@@ -194,16 +195,25 @@ function triggers(x1, y1, x2, y2, type = '') {
     //   - lower boulders always trigger before higher ones, or more nuanced?
     //   - which triggers are queued and which trigger instantly?
 
-    neighbours = tidy(neighbours, arrange([desc('y'),desc('x')]) );
+    neighbours = neighbours.map(n => {
+        n.offset = String(x1 - n.x) + ',' + String(y1 - n.y);
+        n.dist = dists[n.offset];
+        n.ntype = type_order[n.type];
+        return n;
+    });
+
+    neighbours = tidy(neighbours, arrange(['ntype', 'dist', desc('y'), desc('x')]) );
 
     for(var i=0; i<neighbours.length; i++) {
         var n = neighbours[i];
-        var n_offset = String(x1 - n.x) + ',' + String(y1 - n.y);//  offset(x1, y1, n.x, n.y);
+        // var n_offset = String(x1 - n.x) + ',' + String(y1 - n.y);//  offset(x1, y1, n.x, n.y);
         var rule_set = trigger_rules[dir][type][n.type];
         // console.log(type, dir, n.type);
-        if(rule_set.indexOf(n_offset) > -1) {
+        if(rule_set.indexOf(n.offset) > -1) {
             if(queue.indexOf(n.id) === -1) queue.push(n.id);
             if(verbose) console.log(`added ${n.id} to queue 2`);
         }
     }
 }
+
+var nx;
