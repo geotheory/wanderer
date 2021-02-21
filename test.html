@@ -68,12 +68,15 @@ document.body.addEventListener('mousemove',function(e){
 })
 
 document.body.addEventListener('touchmove',function(e){
-    touch_report.innerText = stringifyEvent(e);
+    var touch = e.touches[0];
+    mouseX = touch.pageX;
+    mouseY = touch.pageY;
+    // touch_report.innerText = stringifyEvent(e);
     // et = e;
     // var touch = e.touches[0];
     // mouseX = touch.pageX;
     // mouseY = touch.pageY;
-    // touch_report.innerText = mouseX + ' ' + mouseY;
+    touch_report.innerText = mouseX + ' ' + mouseY;
 })
 
 
